@@ -1,1 +1,2 @@
-# vcard
+# VCARD
+Visiting Card scanner application
