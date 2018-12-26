@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".Activity.AuthActivity">
+
+    <TextView
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Sign up"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"/>
+    <LinearLayout
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:id="@+id/auth_email_layout"
+        android:padding="10dp">
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_email"/>
+        <EditText
+            android:id="@+id/auth_email_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:inputType="textEmailAddress"
+            android:hint="Enter email"
+            android:background="@android:color/transparent"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_below="@id/auth_email_layout"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:id="@+id/auth_password_layout"
+        android:padding="10dp">
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_lock"/>
+        <EditText
+            android:id="@+id/auth_password_et"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:inputType="textPassword"
+            android:maxLength="10"
+            android:hint="Enter password"
+            android:background="@android:color/transparent"/>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true">
+        <TextView
+            android:id="@+id/auth_verification_code_tv"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="A verification code will be send to your number"
+            android:textAlignment="center"
+            android:padding="10dp"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:layout_marginTop="20dp" />
+        <Button
+            android:id="@+id/auth_btn_send"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="send verification"/>
+        <ProgressBar
+            android:id="@+id/auth_progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone"/>
+    </RelativeLayout>
+</RelativeLayout>

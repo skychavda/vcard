@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/fragment_camera_linear">
+        <Button
+            android:layout_marginTop="10dp"
+            android:id="@+id/fragment_camera_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Take Picture"
+            android:background="?attr/selectableItemBackground"/>
+        <Button
+            android:layout_marginTop="10dp"
+            android:id="@+id/fragment_camera_save_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Save"
+            android:background="?attr/selectableItemBackground"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/fragment_camera_iv"
+        android:layout_below="@id/fragment_camera_linear"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"/>
+</RelativeLayout>

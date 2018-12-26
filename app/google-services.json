@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "177676497455",
+    "firebase_url": "https://vcard-9cbc2.firebaseio.com",
+    "project_id": "vcard-9cbc2",
+    "storage_bucket": "vcard-9cbc2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177676497455:android:91aab1fcf850c049",
+        "android_client_info": {
+          "package_name": "vcard.application.android.com.vcard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "177676497455-l5sp8dr670d4c60sm7gqrb8g55d0g48g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADxl1zRBJOLpimx6KRcLa7maQgXJushQI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
