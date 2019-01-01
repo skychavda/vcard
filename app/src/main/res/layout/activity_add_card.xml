@@ -11,191 +11,222 @@
     <ImageView
         android:id="@+id/add_card_imageView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="250dp"
         android:scaleType="fitXY" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/add_card_textView"
+        <!--<TextView-->
+        <!--android:id="@+id/add_card_textView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
+        <!--<EditText-->
+        <!--android:id="@+id/add_card_name_edit"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--/>-->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="vertical">-->
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
-        <!--<TextView-->
-        <!--android:layout_width="23dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:textAppearance="?android:textAppearanceMedium"-->
-        <!--android:text="Name"-->
-        <!--android:gravity="center|left"-->
-        <!--android:paddingStart="10dp"/>-->
-        <!--<EditText-->
-        <!--android:id="@+id/add_card_name_textView"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="3"/>-->
-        <!--</LinearLayout>-->
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
-        <!--<TextView-->
-        <!--android:layout_width="23dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:textAppearance="?android:textAppearanceMedium"-->
-        <!--android:text="Address"-->
-        <!--android:gravity="center|left"-->
-        <!--android:paddingStart="10dp"/>-->
-        <!--<EditText-->
-        <!--android:id="@+id/add_card_address_textView"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="3"/>-->
-        <!--</LinearLayout>-->
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
-        <!--<TextView-->
-        <!--android:layout_width="23dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:textAppearance="?android:textAppearanceMedium"-->
-        <!--android:text="Contact"-->
-        <!--android:gravity="center|left"-->
-        <!--android:paddingStart="10dp"/>-->
-        <!--<EditText-->
-        <!--android:id="@+id/add_card_contact_textView"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="3"/>-->
-        <!--</LinearLayout>-->
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
-        <!--<TextView-->
-        <!--android:layout_width="23dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:textAppearance="?android:textAppearanceMedium"-->
-        <!--android:text="Email"-->
-        <!--android:gravity="center|left"-->
-        <!--android:paddingStart="10dp"/>-->
-        <!--<EditText-->
-        <!--android:id="@+id/add_card_email_textView"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="3"/>-->
-        <!--</LinearLayout>-->
-        <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Contact Person 1"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:textAppearance="?android:textAppearanceMedium"/>-->
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <!--<TextView-->
-        <!--android:layout_width="23dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_weight="1"-->
-        <!--android:gravity="center|left"-->
-        <!--android:paddingStart="10dp"-->
-        <!--android:text="First Name"-->
-        <!--android:textAppearance="?android:textAppearanceMedium" />-->
-        <!--<EditText-->
-        <!--android:id="@+id/add_card_person1_fName_textView"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="3"/>-->
-        <!--</LinearLayout>-->
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
-        <!--<TextView-->
-        <!--android:layout_width="23dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:textAppearance="?android:textAppearanceMedium"-->
-        <!--android:text="Last Name"-->
-        <!--android:gravity="center|left"-->
-        <!--android:paddingStart="10dp"/>-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <!--<EditText-->
-        <!--android:id="@+id/add_card_person1_lName_textView"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="3" />-->
-        <!--</LinearLayout>-->
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
-        <!--<TextView-->
-        <!--android:layout_width="23dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:textAppearance="?android:textAppearanceMedium"-->
-        <!--android:text="Contact"-->
-        <!--android:gravity="center|left"-->
-        <!--android:paddingStart="10dp"/>-->
-        <!--<EditText-->
-        <!--android:id="@+id/add_card_person1_contact_textView"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="3"/>-->
-        <!--</LinearLayout>-->
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
-        <!--<TextView-->
-        <!--android:layout_width="23dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:textAppearance="?android:textAppearanceMedium"-->
-        <!--android:text="Email"-->
-        <!--android:gravity="center|left"-->
-        <!--android:paddingStart="10dp"/>-->
-        <!--<EditText-->
-        <!--android:id="@+id/add_card_person1_email_textView"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="3"/>-->
-        <!--</LinearLayout>-->
-        <!--<LinearLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="horizontal">-->
-        <!--<TextView-->
-        <!--android:layout_width="23dp"-->
-        <!--android:layout_weight="1"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:textAppearance="?android:textAppearanceMedium"-->
-        <!--android:text="Designation"-->
-        <!--android:gravity="center|left"-->
-        <!--android:paddingStart="10dp"/>-->
-        <!--<EditText-->
-        <!--android:id="@+id/add_card_person1_designation_textView"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="3"/>-->
-        <!--</LinearLayout>-->
-        <!--</LinearLayout>-->
+                <TextView
+                    android:layout_width="23dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|left"
+                    android:paddingStart="10dp"
+                    android:text="Name"
+                    android:textAppearance="?android:textAppearanceMedium" />
+
+                <EditText
+                    android:id="@+id/add_card_name_textView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3" />
+            </LinearLayout>
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="23dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:gravity="center|left"-->
+                    <!--android:paddingStart="10dp"-->
+                    <!--android:text="Address"-->
+                    <!--android:textAppearance="?android:textAppearanceMedium" />-->
+
+                <!--<EditText-->
+                    <!--android:id="@+id/add_card_address_textView"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="3" />-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="23dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:gravity="center|left"-->
+                    <!--android:paddingStart="10dp"-->
+                    <!--android:text="Contact"-->
+                    <!--android:textAppearance="?android:textAppearanceMedium" />-->
+
+                <!--<EditText-->
+                    <!--android:id="@+id/add_card_contact_textView"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="3" />-->
+            <!--</LinearLayout>-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="23dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|left"
+                    android:paddingStart="10dp"
+                    android:text="Email"
+                    android:textAppearance="?android:textAppearanceMedium" />
+
+                <EditText
+                    android:id="@+id/add_card_email_editView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3" />
+            </LinearLayout>
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:text="Contact Person 1"-->
+                <!--android:textAppearance="?android:textAppearanceMedium" />-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="23dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:gravity="center|left"-->
+                    <!--android:paddingStart="10dp"-->
+                    <!--android:text="First Name"-->
+                    <!--android:textAppearance="?android:textAppearanceMedium" />-->
+
+                <!--<EditText-->
+                    <!--android:id="@+id/add_card_person1_fName_textView"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="3" />-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="23dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:gravity="center|left"-->
+                    <!--android:paddingStart="10dp"-->
+                    <!--android:text="Last Name"-->
+                    <!--android:textAppearance="?android:textAppearanceMedium" />-->
+
+                <!--<EditText-->
+                    <!--android:id="@+id/add_card_person1_lName_textView"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="3" />-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="23dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:gravity="center|left"-->
+                    <!--android:paddingStart="10dp"-->
+                    <!--android:text="Contact"-->
+                    <!--android:textAppearance="?android:textAppearanceMedium" />-->
+
+                <!--<EditText-->
+                    <!--android:id="@+id/add_card_person1_contact_textView"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="3" />-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="23dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:gravity="center|left"-->
+                    <!--android:paddingStart="10dp"-->
+                    <!--android:text="Email"-->
+                    <!--android:textAppearance="?android:textAppearanceMedium" />-->
+
+                <!--<EditText-->
+                    <!--android:id="@+id/add_card_person1_email_textView"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="3" />-->
+            <!--</LinearLayout>-->
+
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="23dp"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:gravity="center|left"-->
+                    <!--android:paddingStart="10dp"-->
+                    <!--android:text="Designation"-->
+                    <!--android:textAppearance="?android:textAppearanceMedium" />-->
+
+                <!--<EditText-->
+                    <!--android:id="@+id/add_card_person1_designation_textView"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="3" />-->
+            <!--</LinearLayout>-->
+        </LinearLayout>
     </ScrollView>
 </LinearLayout>

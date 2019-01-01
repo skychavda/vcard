@@ -35,6 +35,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import vcard.application.android.com.vcard.BuildConfig;
 import vcard.application.android.com.vcard.R;
@@ -56,9 +58,9 @@ public class AddCardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_card);
-//        company = findViewById(R.id.add_card_name_textView);
+        company = findViewById(R.id.add_card_name_textView);
 //        address = findViewById(R.id.add_card_address_textView);
-//        email = findViewById(R.id.add_card_email_textView);
+        email = findViewById(R.id.add_card_email_editView);
 //        phone = findViewById(R.id.add_card_contact_textView);
 //        firstName = findViewById(R.id.add_card_person1_fName_textView);
 //        lastName = findViewById(R.id.add_card_person1_lName_textView);
@@ -67,12 +69,12 @@ public class AddCardActivity extends AppCompatActivity {
 //        designation = findViewById(R.id.add_card_person1_designation_textView);
 
         card = findViewById(R.id.add_card_imageView);
-        extractText = findViewById(R.id.add_card_textView);
+//        extractText = findViewById(R.id.add_card_textView);
         storageReference = FirebaseStorage.getInstance().getReference();
-        if (savedInstanceState != null) {
-            imageUri = Uri.parse(savedInstanceState.getString(SAVED_INSTANCE_URI));
-            extractText.setText(savedInstanceState.getString(SAVED_INSTANCE_RESULT));
-        }
+//        if (savedInstanceState != null) {
+//            imageUri = Uri.parse(savedInstanceState.getString(SAVED_INSTANCE_URI));
+//            extractText.setText(savedInstanceState.getString(SAVED_INSTANCE_RESULT));
+//        }
 
         detector = new TextRecognizer.Builder(getApplicationContext()).build();
 
@@ -99,23 +101,34 @@ public class AddCardActivity extends AppCompatActivity {
     }
 
     private void takePicture() throws IOException {
+        File dir = null;
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//        File photo = new File(Environment.getExternalStorageDirectory(), "picture.jpg");
+//        imageUri = FileProvider.getUriForFile(AddCardActivity.this,
+//                BuildConfig.APPLICATION_ID + ".provider", photo);
+//        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+//        startActivityForResult(intent, CAMERA_REQUEST);
         Intent picture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         String timeSpan = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "VCard_"+timeSpan;
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName,".jpg",storageDir);
-        //imageUri = Uri.parse(image.getAbsolutePath());
-        imageUri = FileProvider.getUriForFile(AddCardActivity.this,BuildConfig.APPLICATION_ID + ".provider", image);
+//        String imageFileName = "VCard_"+timeSpan;
+        dir = new File(Environment.getExternalStorageDirectory()+"/Vcard");
+        if(!dir.exists()){
+            dir = new File(Environment.getExternalStorageDirectory().getPath()+"/VCard");
+            dir.mkdir();
+        }
+        File photo = new File(dir, "VCard_"+timeSpan+".jpg");
+////      File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+////      File image = File.createTempFile(imageFileName,".jpg",storageDir);
+//        imageUri = Uri.parse(image.getAbsolutePath());
+        imageUri = FileProvider.getUriForFile(AddCardActivity.this,BuildConfig.APPLICATION_ID + ".provider", photo);
         picture.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(picture,CAMERA_REQUEST);
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK){
-            if(requestCode==CAMERA_REQUEST) {
+        if(resultCode == RESULT_OK && requestCode == CAMERA_REQUEST) {
                 card.setImageURI(imageUri);
                 launchMediaScanIntent();
                 try {
@@ -130,27 +143,29 @@ public class AddCardActivity extends AppCompatActivity {
                             //extract scanned text blocks here
                             TextBlock tBlock = textBlocks.valueAt(index);
                             blocks = blocks + tBlock.getValue() + "\n" + "\n";
-                            for (Text line : tBlock.getComponents()) {
-                                //extract scanned text lines here
-                                lines = lines + line.getValue() + "\n";
-                                for (Text element : line.getComponents()) {
-                                    //extract scanned text words here
-                                    words = words + element.getValue() + ", ";
-                                }
-                            }
+//                            for (Text line : tBlock.getComponents()) {
+//                                //extract scanned text lines here
+//                                lines = lines + line.getValue() + "\n";
+//                                for (Text element : line.getComponents()) {
+//                                    //extract scanned text words here
+//                                    words = words + element.getValue() + ", ";
+//                                }
+//                            }
                         }
                         if (textBlocks.size() == 0) {
                             extractText.setText("Scan Failed: Found nothing to scan");
                         } else {
-                            extractText.setText(extractText.getText() + "Blocks: " + "\n");
-                            extractText.setText(extractText.getText() + blocks + "\n");
-                            extractText.setText(extractText.getText() + "---------" + "\n");
-                            extractText.setText(extractText.getText() + "Lines: " + "\n");
-                            extractText.setText(extractText.getText() + lines + "\n");
-                            extractText.setText(extractText.getText() + "---------" + "\n");
-                            extractText.setText(extractText.getText() + "Words: " + "\n");
-                            extractText.setText(extractText.getText() + words + "\n");
-                            extractText.setText(extractText.getText() + "---------" + "\n");
+                            extractName(blocks);
+                            extractEmail(blocks);
+//                            extractText.setText(extractText.getText() + "Blocks: " + "\n");
+//                            extractText.setText(extractText.getText() + blocks + "\n");
+//                            extractText.setText(extractText.getText() + "---------" + "\n");
+//                            extractText.setText(extractText.getText() + "Lines: " + "\n");
+//                            extractText.setText(extractText.getText() + lines + "\n");
+//                            extractText.setText(extractText.getText() + "---------" + "\n");
+//                            extractText.setText(extractText.getText() + "Words: " + "\n");
+//                            extractText.setText(extractText.getText() + words + "\n");
+//                            extractText.setText(extractText.getText() + "---------" + "\n");
                         }
                     } else {
                         extractText.setText("Could not set up the detector!");
@@ -164,6 +179,26 @@ public class AddCardActivity extends AppCompatActivity {
             else{
                 finish();
             }
+        }
+
+
+    public void extractName(String str){
+        final String NAME_REGX = "^([A-Z]([a-z]*|\\.) *){1,2}([A-Z][a-z]+-?)+$";
+        Pattern p = Pattern.compile(NAME_REGX, Pattern.MULTILINE);
+        Matcher m =  p.matcher(str);
+        if(m.find()){
+            System.out.println(m.group());
+            company.setText(m.group());
+        }
+    }
+
+    public void extractEmail(String str){
+        final String EMAIL_REGEX = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+        Pattern p = Pattern.compile(EMAIL_REGEX, Pattern.MULTILINE);
+        Matcher m = p.matcher(str);   // get a matcher object
+        if(m.find()){
+            System.out.println(m.group());
+            email.setText(m.group());
         }
     }
 
