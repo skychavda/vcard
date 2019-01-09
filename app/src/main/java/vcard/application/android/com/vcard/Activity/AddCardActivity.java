@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -38,6 +39,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import vcard.application.android.com.vcard.BackgroundAsync.BackgroundWorker;
 import vcard.application.android.com.vcard.BuildConfig;
 import vcard.application.android.com.vcard.R;
 
@@ -61,7 +63,7 @@ public class AddCardActivity extends AppCompatActivity {
         company = findViewById(R.id.add_card_name_textView);
 //        address = findViewById(R.id.add_card_address_textView);
         email = findViewById(R.id.add_card_email_editView);
-//        phone = findViewById(R.id.add_card_contact_textView);
+        phone = findViewById(R.id.add_card_contact_editView);
 //        firstName = findViewById(R.id.add_card_person1_fName_textView);
 //        lastName = findViewById(R.id.add_card_person1_lName_textView);
 //        contact = findViewById(R.id.add_card_person1_contact_textView);
@@ -157,6 +159,8 @@ public class AddCardActivity extends AppCompatActivity {
                         } else {
                             extractName(blocks);
                             extractEmail(blocks);
+                            extractPhone(blocks);
+//                            extractAddress(blocks);
 //                            extractText.setText(extractText.getText() + "Blocks: " + "\n");
 //                            extractText.setText(extractText.getText() + blocks + "\n");
 //                            extractText.setText(extractText.getText() + "---------" + "\n");
@@ -202,6 +206,26 @@ public class AddCardActivity extends AppCompatActivity {
         }
     }
 
+    public void extractPhone(String str){
+        System.out.println("Getting Phone Number");
+        final String PHONE_REGEX="(?:^|\\D)(\\d{3})[)\\-. ]*?(\\d{3})[\\-. ]*?(\\d{4})(?:$|\\D)";
+        Pattern p = Pattern.compile(PHONE_REGEX, Pattern.MULTILINE);
+        Matcher m = p.matcher(str);   // get a matcher object
+        if(m.find()){
+            System.out.println(m.group());
+            phone.setText(m.group());
+        }
+    }
+
+//    public void extractAddress(String str){
+//        final String ADD_REGEX ="^(\\w*\\s*[\\#\\-,\\.\\/\(\)\\&]*)+$";
+//        Pattern p = Pattern.compile(ADD_REGEX, Pattern.MULTILINE);
+//        Mathcher m = p.mathcer(str);
+//        if(m.find()){
+//            address.setText(m.group);
+//        }
+//    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         if (imageUri != null) {
@@ -232,5 +256,14 @@ public class AddCardActivity extends AppCompatActivity {
 
         return BitmapFactory.decodeStream(ctx.getContentResolver()
                 .openInputStream(uri), null, bmOptions);
+    }
+
+    public void AddCard(View view) {
+        String company_name = company.getText().toString();
+        String emailAddress = email.getText().toString();
+        String contact = phone.getText().toString();
+        String type = "add";
+        BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+        backgroundWorker.execute(type, company_name, emailAddress, contact);
     }
 }
