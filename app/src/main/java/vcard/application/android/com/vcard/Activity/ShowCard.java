@@ -10,21 +10,28 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import vcard.application.android.com.vcard.R;
+import vcard.application.android.com.vcard.Utility.CardItem;
 
 public class ShowCard extends AppCompatActivity {
 
-    TextView number, email,address,companyEmail;
+    TextView number, email,address,companyEmail,name;
     ImageButton message;
+    CardItem cardItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_card);
+        cardItem = new CardItem();
+        name = findViewById(R.id.show_card_company_name);
         number = findViewById(R.id.show_card_number);
         email = findViewById(R.id.show_card_email);
         message = findViewById(R.id.show_card_message);
         address = findViewById(R.id.show_card_company_address);
         companyEmail = findViewById(R.id.show_card_company_email);
+
+
+        name.setText(cardItem.getName());
 
         number.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("MissingPermission")

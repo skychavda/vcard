@@ -43,5 +43,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
 
     implementation 'com.google.android.gms:play-services-vision:15.0.0'
+
+    implementation 'com.android.volley:volley:1.0.0'
 }
 apply plugin: 'com.google.gms.google-services'

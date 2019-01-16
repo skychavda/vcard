@@ -12,7 +12,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,38 +35,60 @@ import vcard.application.android.com.vcard.Utility.CardItem;
 
 
 public class HomeFragment extends Fragment {
-    RecyclerView recyclerView;
-    CardItem item;
+    private RecyclerView recyclerView;
     List<CardItem> list = new ArrayList<>();
-    String[] name = {"Meet Janani","Krupa Kalola","Yash Ganatra","Dhrumil Fichadiya"};
-    String[] number = {"9510443624","9409182376","8329572934","9012382743"};
-    int[] picture = {R.drawable.meet,R.drawable.krupa,R.drawable.petpuja,R.drawable.dhrumil} ;
-    int[] id = {1,2,3,4};
+    String URL_JSON = "http://chavdacushion.gq/show-card.json";
+    JsonArrayRequest ArrayRequest ;
+    RequestQueue requestQueue ;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragement_home,container,false);
-        for(int i=0;i<name.length;i++){
-            item = new CardItem(getContext());
-            item.setName(name[i]);
-            item.setNumber(number[i]);
-            item.setCardId(id[i]);
-            item.setPicture(picture[i]);
-            list.add(item);
-        }
-        /*item = new CardItem(getContext());
-        item.setName("Akash Chavda");
-        item.setNumber("9586341029");
-        item.setCardId(1);
-        list.add(item);*/
-        recyclerView = (RecyclerView)view.findViewById(R.id.home_fragment_recyclerView);
-        recyclerView.setAdapter(new HomeFragmentRecyclerAdapter(getContext(), list, new HomeFragmentRecyclerAdapter.OnItemClickListner() {
+        recyclerView = view.findViewById(R.id.home_fragment_recyclerView);
+        jsoncall();
+        return view;
+    }
+
+    public void jsoncall(){
+        ArrayRequest = new JsonArrayRequest(URL_JSON, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                JSONObject jsonObject = null;
+                for (int i=0; i< response.length(); i++){
+                    try{
+                        jsonObject = response.getJSONObject(i);
+                        CardItem cardItem = new CardItem();
+                        cardItem.setCardId(jsonObject.getInt("ID"));
+                        cardItem.setPicture(jsonObject.getString("Image"));
+                        cardItem.setName(jsonObject.getString("Name"));
+//                        cardItem.setEmail(jsonObject.getString("Email"));
+                        cardItem.setNumber(jsonObject.getString("Contact"));
+                        list.add(cardItem);
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                setAdapter(list);
+            }
+        },new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getContext(),"Error",Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.add(ArrayRequest);
+    }
+    public void setAdapter (List<CardItem> lst) {
+
+        HomeFragmentRecyclerAdapter myAdapter = new HomeFragmentRecyclerAdapter(getContext(), lst, new HomeFragmentRecyclerAdapter.OnItemClickListner() {
             @Override
             public void onItemClick(CardItem item) {
                 startActivity(new Intent(getContext(),ShowCard.class));
             }
-        }));
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        return view;
+        recyclerView.setAdapter(myAdapter);
     }
 }

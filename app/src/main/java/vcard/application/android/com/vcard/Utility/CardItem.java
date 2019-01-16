@@ -7,13 +7,25 @@ public class CardItem {
     private String name;
     private String number;
     private int cardId;
-    private int picture;
+    private String picture;
 
-    public int getPicture() {
+    public CardItem(){}
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    private String email;
+
+    public String getPicture() {
         return picture;
     }
 
-    public void setPicture(int picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
     }
 

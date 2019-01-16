@@ -55,15 +55,15 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
         public HomeFragmentHolder(View itemView) {
             super(itemView);
             cardView = itemView.findViewById(R.id.home_recycler_item_cardView);
-            tvName = (TextView)itemView.findViewById(R.id.home_recycler_item_tv_name);
-            tvNumber = (TextView)itemView.findViewById(R.id.home_recycler_item_tv_number);
-            ivCard = (ImageView)itemView.findViewById(R.id.home_recycler_item_iv);
+            tvName = itemView.findViewById(R.id.home_recycler_item_tv_name);
+            tvNumber = itemView.findViewById(R.id.home_recycler_item_tv_number);
+            ivCard = itemView.findViewById(R.id.home_recycler_item_iv);
         }
 
         public void bind(final CardItem item, final OnItemClickListner listener){
             tvName.setText(item.getName());
             tvNumber.setText(item.getNumber());
-            ivCard.setImageResource(item.getPicture());
+//            ivCard.setImageResource(item.getCardId());
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
