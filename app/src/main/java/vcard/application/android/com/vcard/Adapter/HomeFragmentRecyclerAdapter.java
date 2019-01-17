@@ -2,6 +2,7 @@ package vcard.application.android.com.vcard.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import vcard.application.android.com.vcard.Activity.ShowCard;
@@ -20,27 +22,31 @@ import vcard.application.android.com.vcard.Utility.CardItem;
 public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragmentRecyclerAdapter.HomeFragmentHolder> {
 
     List<CardItem> itemList;
-    OnItemClickListner listner;
-    public interface OnItemClickListner{
-        void onItemClick(CardItem item);
-    }
+//    OnItemClickListner listner;
+//    public interface OnItemClickListner{
+//        void onItemClick(CardItem item);
+//    }       OnItemClickListner listner
     Context context;
-    public HomeFragmentRecyclerAdapter(Context context, List<CardItem> itemList, OnItemClickListner listner){
+    public HomeFragmentRecyclerAdapter(Context context, List<CardItem> itemList){
         this.context=context;
         this.itemList=itemList;
-        this.listner=listner;
+//        this.listner=listner;
     }
     @NonNull
     @Override
     public HomeFragmentHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.home_reycler_item,parent,false);
-        return new HomeFragmentHolder(view);
+        return new HomeFragmentHolder(view,context,itemList);
     }
 
     @Override
     public void onBindViewHolder(@NonNull HomeFragmentHolder holder, int position) {
-        holder.bind(itemList.get(position),listner);
+//        holder.bind(itemList.get(position),listner);
+        holder.tvName.setText(itemList.get(position).getName());
+        holder.tvNumber.setText(itemList.get(position).getNumber());
+        holder.tvEmail.setText(itemList.get(position).getEmail());
+        holder.ivCard.setImageURI(Uri.parse(itemList.get(position).getPicture()));
     }
 
     @Override
@@ -48,28 +54,46 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
         return itemList.size();
     }
 
-    public class HomeFragmentHolder extends RecyclerView.ViewHolder{
-        TextView tvName,tvNumber;
+    public class HomeFragmentHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        TextView tvName,tvNumber,tvEmail;
         ImageView ivCard;
         CardView cardView;
-        public HomeFragmentHolder(View itemView) {
+        List<CardItem> cardItems;
+        Context ctx;
+        public HomeFragmentHolder(View itemView,Context ctx,List<CardItem> cardItems) {
             super(itemView);
+            this.cardItems=cardItems;
+            this.ctx=ctx;
+            itemView.setOnClickListener(this);
             cardView = itemView.findViewById(R.id.home_recycler_item_cardView);
             tvName = itemView.findViewById(R.id.home_recycler_item_tv_name);
             tvNumber = itemView.findViewById(R.id.home_recycler_item_tv_number);
+            tvEmail = itemView.findViewById(R.id.home_recycler_item_tv_email);
             ivCard = itemView.findViewById(R.id.home_recycler_item_iv);
         }
 
-        public void bind(final CardItem item, final OnItemClickListner listener){
-            tvName.setText(item.getName());
-            tvNumber.setText(item.getNumber());
-//            ivCard.setImageResource(item.getCardId());
-            cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(item);
-                }
-            });
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            CardItem cardItem = this.cardItems.get(position);
+            Intent intent = new Intent(this.ctx,ShowCard.class);
+            intent.putExtra("image",cardItem.getPicture());
+            intent.putExtra("name",cardItem.getName());
+            intent.putExtra("email",cardItem.getEmail());
+            intent.putExtra("number",cardItem.getNumber());
+            this.ctx.startActivity(intent);
         }
+
+//        public void bind(final CardItem item, final OnItemClickListner listener){
+//            tvName.setText(item.getName());
+//            tvNumber.setText(item.getNumber());
+//            ivCard.setImageResource(item.getCardId());
+//            cardView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    listener.onItemClick(item);
+//                }
+//            });
+//        }
     }
 }

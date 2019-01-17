@@ -7,7 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.List;
 
 import vcard.application.android.com.vcard.R;
 import vcard.application.android.com.vcard.Utility.CardItem;
@@ -17,12 +20,15 @@ public class ShowCard extends AppCompatActivity {
     TextView number, email,address,companyEmail,name;
     ImageButton message;
     CardItem cardItem;
+    List<CardItem> list;
+    ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_card);
         cardItem = new CardItem();
+        imageView = findViewById(R.id.show_card_imageView);
         name = findViewById(R.id.show_card_company_name);
         number = findViewById(R.id.show_card_number);
         email = findViewById(R.id.show_card_email);
@@ -30,8 +36,12 @@ public class ShowCard extends AppCompatActivity {
         address = findViewById(R.id.show_card_company_address);
         companyEmail = findViewById(R.id.show_card_company_email);
 
+        imageView.setImageURI(Uri.parse(getIntent().getStringExtra("image")));
+//        imageView.setImageResource(getIntent().getIntExtra("image",00));
+        name.setText(getIntent().getStringExtra("name"));
+        number.setText(getIntent().getStringExtra("number"));
+        companyEmail.setText(getIntent().getStringExtra("email"));
 
-        name.setText(cardItem.getName());
 
         number.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("MissingPermission")

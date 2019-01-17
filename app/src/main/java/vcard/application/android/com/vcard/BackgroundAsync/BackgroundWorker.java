@@ -2,10 +2,19 @@ package vcard.application.android.com.vcard.BackgroundAsync;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.util.Base64;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,6 +24,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BackgroundWorker extends AsyncTask<String, Void, String> {
     Context context;
@@ -28,9 +39,29 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
         String add_url = "http://chavdacushion.gq/add_card.php";
         if(type.equals("add")){
             try {
+//                StringRequest stringRequest = new StringRequest(Request.Method.POST, add_url, new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//
+//                    }
+//                }, new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//
+//                    }
+//                }){
+//                    @Override
+//                    protected Map<String, String> getParams() throws AuthFailureError {
+//                        Map<String,String> params = new HashMap<>();
+//                        String imageDate = imageToString();
+//                        params.put("image","");
+//                        return params;
+//                    }
+//                };
                 String company_name = strings[1];
                 String email = strings[2];
                 String number = strings[3];
+                String image = strings[4];
                 URL url = new URL(add_url);
                 HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                 httpURLConnection.setRequestMethod("POST");
@@ -81,4 +112,12 @@ public class BackgroundWorker extends AsyncTask<String, Void, String> {
     protected void onProgressUpdate(Void... values) {
         super.onProgressUpdate(values);
     }
+
+//    private String imageToString(Bitmap bitmap){
+//        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
+//        byte[] imageBytes = outputStream.toByteArray();
+//        String encoded = Base64.encodeToString(imageBytes,Base64.DEFAULT);
+//        return encoded;
+//    }
 }

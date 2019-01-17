@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
@@ -24,10 +25,15 @@ import android.widget.ImageView;
 
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.Text;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -42,11 +48,13 @@ import java.util.regex.Pattern;
 import vcard.application.android.com.vcard.BackgroundAsync.BackgroundWorker;
 import vcard.application.android.com.vcard.BuildConfig;
 import vcard.application.android.com.vcard.R;
+import vcard.application.android.com.vcard.Utility.CardItem;
 
 public class AddCardActivity extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST = 100;
     StorageReference storageReference;
+    DatabaseReference databaseCard;
     ImageView card;
     TextView extractText;
     TextRecognizer detector;
@@ -60,6 +68,7 @@ public class AddCardActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_card);
+        databaseCard = FirebaseDatabase.getInstance().getReference("card");
         company = findViewById(R.id.add_card_name_textView);
 //        address = findViewById(R.id.add_card_address_textView);
         email = findViewById(R.id.add_card_email_editView);
@@ -259,11 +268,20 @@ public class AddCardActivity extends AppCompatActivity {
     }
 
     public void AddCard(View view) {
+        String image = imageUri.toString();
         String company_name = company.getText().toString();
         String emailAddress = email.getText().toString();
         String contact = phone.getText().toString();
-        String type = "add";
-        BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-        backgroundWorker.execute(type, company_name, emailAddress, contact);
+
+        if(!TextUtils.isEmpty(company_name)&&!TextUtils.isEmpty(contact)){
+            String id = databaseCard.push().getKey();
+
+            CardItem cardItem = new CardItem(company_name,contact,id,image,emailAddress);
+            databaseCard.child(id).setValue(cardItem);
+            Toast.makeText(this,"Uploded",Toast.LENGTH_SHORT).show();
+        }
+//        String type = "add";
+//        BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+//        backgroundWorker.execute(type, company_name, emailAddress, contact,image);
     }
 }

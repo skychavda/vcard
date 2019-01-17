@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:177676497455:android:91aab1fcf850c049",
+        "mobilesdk_app_id": "1:177676497455:android:10f859ab02460491",
         "android_client_info": {
-          "package_name": "vcard.application.android.com.vcard"
+          "package_name": "com.example.dell.cardstore1"
         }
       },
       "oauth_client": [
@@ -31,6 +31,50 @@
         "appinvite_service": {
           "status": 1,
           "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:177676497455:android:91aab1fcf850c049",
+        "android_client_info": {
+          "package_name": "vcard.application.android.com.vcard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "177676497455-rt8hjo03gems8r04ets74a8t8m9024h4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vcard.application.android.com.vcard",
+            "certificate_hash": "ab1bb8a50ec163976386347f6a38fa42948a9545"
+          }
+        },
+        {
+          "client_id": "177676497455-l5sp8dr670d4c60sm7gqrb8g55d0g48g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADxl1zRBJOLpimx6KRcLa7maQgXJushQI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "177676497455-l5sp8dr670d4c60sm7gqrb8g55d0g48g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

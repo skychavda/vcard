@@ -6,10 +6,19 @@ import android.graphics.Bitmap;
 public class CardItem {
     private String name;
     private String number;
-    private int cardId;
+    private String cardId;
     private String picture;
+    private String email;
 
     public CardItem(){}
+
+    public CardItem(String name, String number, String cardId, String picture, String email) {
+        this.name = name;
+        this.number = number;
+        this.cardId = cardId;
+        this.picture = picture;
+        this.email = email;
+    }
 
     public String getEmail() {
         return email;
@@ -19,7 +28,6 @@ public class CardItem {
         this.email = email;
     }
 
-    private String email;
 
     public String getPicture() {
         return picture;
@@ -50,11 +58,11 @@ public class CardItem {
         this.number = number;
     }
 
-    public int getCardId() {
+    public String getCardId() {
         return cardId;
     }
 
-    public void setCardId(int cardId) {
+    public void setCardId(String cardId) {
         this.cardId = cardId;
     }
 }
