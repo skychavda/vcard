@@ -22,7 +22,6 @@ import android.widget.Toolbar;
 import java.util.List;
 
 import vcard.application.android.com.vcard.Adapter.SectionPagerAdapter;
-import vcard.application.android.com.vcard.Fragment.CameraFragment;
 import vcard.application.android.com.vcard.Fragment.HomeFragment;
 import vcard.application.android.com.vcard.Helper.BottomNavigationViewHelper;
 import vcard.application.android.com.vcard.R;

@@ -53,6 +53,7 @@ public class HomeFragment extends Fragment {
         recyclerView = view.findViewById(R.id.home_fragment_recyclerView);
         databaseCard = FirebaseDatabase.getInstance().getReference("card");
 //        jsoncall();
+
         return view;
     }
 
@@ -80,6 +81,7 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getContext(),"error",Toast.LENGTH_SHORT).show();
             }
         });
+
     }
 
 //    public void jsoncall(){

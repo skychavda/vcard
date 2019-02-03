@@ -1,6 +1,8 @@
 package vcard.application.android.com.vcard.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -11,6 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +60,7 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
         return itemList.size();
     }
 
-    public class HomeFragmentHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class HomeFragmentHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
         TextView tvName,tvNumber,tvEmail;
         ImageView ivCard;
         CardView cardView;
@@ -65,6 +71,7 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
             this.cardItems=cardItems;
             this.ctx=ctx;
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
             cardView = itemView.findViewById(R.id.home_recycler_item_cardView);
             tvName = itemView.findViewById(R.id.home_recycler_item_tv_name);
             tvNumber = itemView.findViewById(R.id.home_recycler_item_tv_number);
@@ -82,6 +89,25 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
             intent.putExtra("email",cardItem.getEmail());
             intent.putExtra("number",cardItem.getNumber());
             this.ctx.startActivity(intent);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            final int position = getAdapterPosition();
+            final AlertDialog.Builder alertDialog = new AlertDialog.Builder(ctx);
+            alertDialog.setTitle("Delete");
+            alertDialog.setMessage("Are you want to delete?");
+            alertDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+//                    Toast.makeText(ctx, ""+cardItems.get(position).getCardId(), Toast.LENGTH_SHORT).show();
+                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("card").child(cardItems.get(position).getCardId());
+                    databaseReference.removeValue();
+                }
+            });
+            alertDialog.show();
+            Toast.makeText(ctx, "id: "+cardItems.get(position).getCardId(), Toast.LENGTH_SHORT).show();
+            return false;
         }
 
 //        public void bind(final CardItem item, final OnItemClickListner listener){

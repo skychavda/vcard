@@ -6,9 +6,14 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -22,6 +27,7 @@ public class ShowCard extends AppCompatActivity {
     CardItem cardItem;
     List<CardItem> list;
     ImageView imageView;
+    String cardId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,7 @@ public class ShowCard extends AppCompatActivity {
         message = findViewById(R.id.show_card_message);
         address = findViewById(R.id.show_card_company_address);
         companyEmail = findViewById(R.id.show_card_company_email);
+        cardId = FirebaseDatabase.getInstance().getReference().child("card").getKey();
 
         imageView.setImageURI(Uri.parse(getIntent().getStringExtra("image")));
 //        imageView.setImageResource(getIntent().getIntExtra("image",00));
@@ -83,6 +90,10 @@ public class ShowCard extends AppCompatActivity {
                 startActivity(mailIntent);
             }
         });
+    }
+
+    private void deleteCard(String cardId) {
+
     }
 
     /*@SuppressLint("MissingPermission")
