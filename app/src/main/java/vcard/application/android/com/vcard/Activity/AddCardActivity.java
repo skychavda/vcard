@@ -69,7 +69,7 @@ public class AddCardActivity extends AppCompatActivity {
     TextRecognizer detector;
     //    String filePath
     private byte[] uploadBytes;
-    EditText company, address, email, phone, firstName, lastName, contact, personaEmail, designation;
+    EditText company, email, phone;
     private Uri imageUri, compressedImageUri;
     private static final String SAVED_INSTANCE_URI = "uri";
     private static final String SAVED_INSTANCE_RESULT = "result";
@@ -81,25 +81,12 @@ public class AddCardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_card);
         databaseCard = FirebaseDatabase.getInstance().getReference("card");
         company = findViewById(R.id.add_card_name_textView);
-//        address = findViewById(R.id.add_card_address_textView);
         email = findViewById(R.id.add_card_email_editView);
         phone = findViewById(R.id.add_card_contact_editView);
-//        firstName = findViewById(R.id.add_card_person1_fName_textView);
-//        lastName = findViewById(R.id.add_card_person1_lName_textView);
-//        contact = findViewById(R.id.add_card_person1_contact_textView);
-//        personaEmail = findViewById(R.id.add_card_person1_email_textView);
-//        designation = findViewById(R.id.add_card_person1_designation_textView);
-
         card = findViewById(R.id.add_card_imageView);
-//        extractText = findViewById(R.id.add_card_textView);
+
         storageReference = FirebaseStorage.getInstance().getReference();
-//        if (savedInstanceState != null) {
-//            imageUri = Uri.parse(savedInstanceState.getString(SAVED_INSTANCE_URI));
-//            extractText.setText(savedInstanceState.getString(SAVED_INSTANCE_RESULT));
-//        }
-
         detector = new TextRecognizer.Builder(getApplicationContext()).build();
-
         ActivityCompat.requestPermissions(AddCardActivity.this, new
                 String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
     }
@@ -124,62 +111,18 @@ public class AddCardActivity extends AppCompatActivity {
 
     private void takePicture() throws IOException {
         File dir = null;
-//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        File photo = new File(Environment.getExternalStorageDirectory(), "picture.jpg");
-//        imageUri = FileProvider.getUriForFile(AddCardActivity.this,
-//                BuildConfig.APPLICATION_ID + ".provider", photo);
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-//        startActivityForResult(intent, CAMERA_REQUEST);
         Intent picture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         String timeSpan = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//        String imageFileName = "VCard_"+timeSpan;
         dir = new File(Environment.getExternalStorageDirectory() + "/Vcard");
         if (!dir.exists()) {
             dir = new File(Environment.getExternalStorageDirectory().getPath() + "/VCard");
             dir.mkdir();
         }
         File photo = new File(dir, "VCard_" + timeSpan + ".jpg");
-////      File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-////      File image = File.createTempFile(imageFileName,".jpg",storageDir);
-//        imageUri = Uri.parse(image.getAbsolutePath());
         imageUri = FileProvider.getUriForFile(AddCardActivity.this, BuildConfig.APPLICATION_ID + ".provider", photo);
-//        compressImage();
         picture.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(picture, CAMERA_REQUEST);
     }
-
-//    private void compressImage() {
-//        File actualImage = new File(new File(imageUri.getPath()).getAbsoluteFile().getAbsolutePath());
-//        try {
-//            Bitmap compressedImage = new Compressor(this)
-//                    .setMaxWidth(250)
-//                    .setMaxHeight(250)
-//                    .setQuality(75)
-//                    .compressToBitmap(actualImage);
-//
-//            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//            compressedImage.compress(Bitmap.CompressFormat.JPEG, 50, baos);
-//            byte[] final_image = baos.toByteArray();
-//
-//            StorageReference imagePath = storageReference.child("Vcard").child(imageUri.toString());
-//            UploadTask uploadTask = imagePath.putBytes(final_image);
-//            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                @Override
-//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                    Task<Uri> image_firebase_uri = taskSnapshot.getStorage().getDownloadUrl();
-//                    databaseCard.child("image").setValue(image_firebase_uri);
-//                }
-//            }).addOnFailureListener(new OnFailureListener() {
-//                @Override
-//                public void onFailure(@NonNull Exception e) {
-//                    Toast.makeText(AddCardActivity.this, "Error ", Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//
-//        } catch (IOException e) {
-//            Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-//        }
-//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -199,14 +142,6 @@ public class AddCardActivity extends AppCompatActivity {
                         //extract scanned text blocks here
                         TextBlock tBlock = textBlocks.valueAt(index);
                         blocks = blocks + tBlock.getValue() + "\n" + "\n";
-//                            for (Text line : tBlock.getComponents()) {
-//                                //extract scanned text lines here
-//                                lines = lines + line.getValue() + "\n";
-//                                for (Text element : line.getComponents()) {
-//                                    //extract scanned text words here
-//                                    words = words + element.getValue() + ", ";
-//                                }
-//                            }
                     }
                     if (textBlocks.size() == 0) {
                         extractText.setText("Scan Failed: Found nothing to scan");
@@ -214,16 +149,6 @@ public class AddCardActivity extends AppCompatActivity {
                         extractName(blocks);
                         extractEmail(blocks);
                         extractPhone(blocks);
-//                            extractAddress(blocks);
-//                            extractText.setText(extractText.getText() + "Blocks: " + "\n");
-//                            extractText.setText(extractText.getText() + blocks + "\n");
-//                            extractText.setText(extractText.getText() + "---------" + "\n");
-//                            extractText.setText(extractText.getText() + "Lines: " + "\n");
-//                            extractText.setText(extractText.getText() + lines + "\n");
-//                            extractText.setText(extractText.getText() + "---------" + "\n");
-//                            extractText.setText(extractText.getText() + "Words: " + "\n");
-//                            extractText.setText(extractText.getText() + words + "\n");
-//                            extractText.setText(extractText.getText() + "---------" + "\n");
                     }
                 } else {
                     extractText.setText("Could not set up the detector!");
@@ -260,7 +185,6 @@ public class AddCardActivity extends AppCompatActivity {
 
     public void extractPhone(String str) {
         System.out.println("Getting Phone Number");
-//                (?:^|\D)(\d{3})[)\-. ]*?(\d{3})[\-. ]*?(\d{4})(?:$|\D)
         final String PHONE_REGEX = "^((\\+)?(\\d{2}[-])?(\\d{10}){1})?(\\d{11}){0,1}?$";
         Pattern p = Pattern.compile(PHONE_REGEX, Pattern.MULTILINE);
         Matcher m = p.matcher(str);   // get a matcher object
@@ -270,20 +194,10 @@ public class AddCardActivity extends AppCompatActivity {
         }
     }
 
-//    public void extractAddress(String str){
-//        final String ADD_REGEX ="^(\\w*\\s*[\\#\\-,\\.\\/\(\)\\&]*)+$";
-//        Pattern p = Pattern.compile(ADD_REGEX, Pattern.MULTILINE);
-//        Mathcher m = p.mathcer(str);
-//        if(m.find()){
-//            address.setText(m.group);
-//        }
-//    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         if (imageUri != null) {
             outState.putString(SAVED_INSTANCE_URI, imageUri.toString());
-//            outState.putString(SAVED_INSTANCE_RESULT, extractText.getText().toString());
         }
         super.onSaveInstanceState(outState);
     }
@@ -325,9 +239,6 @@ public class AddCardActivity extends AppCompatActivity {
             databaseCard.child(id).setValue(cardItem);
             Toast.makeText(this, "Uploded", Toast.LENGTH_SHORT).show();
         }
-//        String type = "add";
-//        BackgroundWorker backgroundWorker = new BackgroundWorker(this);
-//        backgroundWorker.execute(type, company_name, emailAddress, contact,image);
     }
 
     private String uploadNewPhoto(Uri imagePath) {

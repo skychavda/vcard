@@ -25,7 +25,6 @@ public class ShowCard extends AppCompatActivity {
     TextView number, email,address,companyEmail,name;
     ImageButton message;
     CardItem cardItem;
-    List<CardItem> list;
     ImageView imageView;
     String cardId;
 
@@ -44,7 +43,6 @@ public class ShowCard extends AppCompatActivity {
         cardId = FirebaseDatabase.getInstance().getReference().child("card").getKey();
 
         imageView.setImageURI(Uri.parse(getIntent().getStringExtra("image")));
-//        imageView.setImageResource(getIntent().getIntExtra("image",00));
         name.setText(getIntent().getStringExtra("name"));
         number.setText(getIntent().getStringExtra("number"));
         companyEmail.setText(getIntent().getStringExtra("email"));
@@ -91,40 +89,4 @@ public class ShowCard extends AppCompatActivity {
             }
         });
     }
-
-    private void deleteCard(String cardId) {
-
-    }
-
-    /*@SuppressLint("MissingPermission")
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()){
-            case R.id.show_card_number:
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:" + number.getText()));
-                startActivity(intent);
-                break;
-            case R.id.show_card_company_address:
-                String url = "http://maps.google.com/maps?daddr="+address.getText();
-                Intent addressIntent = new Intent(android.content.Intent.ACTION_VIEW,  Uri.parse(url));
-                startActivity(addressIntent);
-                break;
-            case R.id.show_card_message:
-                startActivity(new Intent(Intent.ACTION_VIEW,Uri.fromParts("sms", String.valueOf(number.getText()),null)));
-                break;
-            case R.id.show_card_email:
-                Intent mailIntent = new Intent(Intent.ACTION_SENDTO);
-                mailIntent.setType("text/plain");
-                mailIntent.putExtra(Intent.EXTRA_EMAIL, email.getText());
-                startActivity(Intent.createChooser(mailIntent, "Send Email"));
-                break;
-            case R.id.show_card_company_email:
-                Intent companyMailIntent = new Intent(Intent.ACTION_SENDTO);
-                companyMailIntent.setType("text/plain");
-                companyMailIntent.putExtra(Intent.EXTRA_EMAIL, companyEmail.getText());
-                startActivity(Intent.createChooser(companyMailIntent, "Send Email"));
-                break;
-        }
-    }*/
 }

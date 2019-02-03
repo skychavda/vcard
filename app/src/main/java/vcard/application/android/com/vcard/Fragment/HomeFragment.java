@@ -42,18 +42,15 @@ import vcard.application.android.com.vcard.Utility.CardItem;
 public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     List<CardItem> list = new ArrayList<>();
-    String URL_JSON = "http://chavdacushion.gq/show-card.json";
+
     DatabaseReference databaseCard;
-    JsonArrayRequest ArrayRequest ;
-    RequestQueue requestQueue ;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragement_home,container,false);
         recyclerView = view.findViewById(R.id.home_fragment_recyclerView);
         databaseCard = FirebaseDatabase.getInstance().getReference("card");
-//        jsoncall();
-
         return view;
     }
 
@@ -65,7 +62,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 list.clear();
-                for(DataSnapshot cardSnapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot cardSnapshot : dataSnapshot.getChildren()) {
                     CardItem cardItem = cardSnapshot.getValue(CardItem.class);
                     list.add(cardItem);
                 }
@@ -73,57 +70,14 @@ public class HomeFragment extends Fragment {
                 HomeFragmentRecyclerAdapter recyclerAdapter = new HomeFragmentRecyclerAdapter(getContext(), list);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 recyclerView.setAdapter(recyclerAdapter);
-                Toast.makeText(getContext(),"size: "+list.size(),Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "size: " + list.size(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(),"error",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
             }
         });
 
     }
-
-//    public void jsoncall(){
-//        ArrayRequest = new JsonArrayRequest(URL_JSON, new Response.Listener<JSONArray>() {
-//            @Override
-//            public void onResponse(JSONArray response) {
-//                JSONObject jsonObject = null;
-//                for (int i=0; i< response.length(); i++){
-//                    try{
-//                        jsonObject = response.getJSONObject(i);
-//                        CardItem cardItem = new CardItem();
-//                        cardItem.setCardId(jsonObject.getString("ID"));
-//                        cardItem.setPicture(jsonObject.getString("Image"));
-//                        cardItem.setName(jsonObject.getString("Name"));
-////                        cardItem.setEmail(jsonObject.getString("Email"));
-//                        cardItem.setNumber(jsonObject.getString("Contact"));
-//                        list.add(cardItem);
-//
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                setAdapter(list);
-//            }
-//        },new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Toast.makeText(getContext(),"Error",Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        requestQueue = Volley.newRequestQueue(getContext());
-//        requestQueue.add(ArrayRequest);
-//    }
-//    public void setAdapter (List<CardItem> lst) {
-//
-//        HomeFragmentRecyclerAdapter myAdapter = new HomeFragmentRecyclerAdapter(getContext(), lst, new HomeFragmentRecyclerAdapter.OnItemClickListner() {
-//            @Override
-//            public void onItemClick(CardItem item) {
-//                startActivity(new Intent(getContext(),ShowCard.class));
-//            }
-//        });
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-//        recyclerView.setAdapter(myAdapter);
-//    }
 }

@@ -72,6 +72,7 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
             this.ctx=ctx;
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
+
             cardView = itemView.findViewById(R.id.home_recycler_item_cardView);
             tvName = itemView.findViewById(R.id.home_recycler_item_tv_name);
             tvNumber = itemView.findViewById(R.id.home_recycler_item_tv_number);
@@ -106,9 +107,11 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
                 }
             });
             alertDialog.show();
-            Toast.makeText(ctx, "id: "+cardItems.get(position).getCardId(), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(ctx, "id: "+cardItems.get(position).getCardId(), Toast.LENGTH_SHORT).show();
             return false;
         }
+
+
 
 //        public void bind(final CardItem item, final OnItemClickListner listener){
 //            tvName.setText(item.getName());
