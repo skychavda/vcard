@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/colorPrimaryDark"
+    android:fitsSystemWindows="true"
+    tools:context=".Activity.CreateAccount">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="24dp"
+        android:paddingTop="56dp"
+        android:paddingRight="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Create an Account"
+            android:textColor="@color/colorWhite"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="First Name"
+            android:textColor="@color/primaryWhiteTransparent"/>
+        <EditText
+            android:id="@+id/create_account_first_name_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Akash"
+            android:textColor="@color/colorWhite"
+            android:paddingBottom="15dp"
+            android:inputType="textPersonName"
+            android:backgroundTint="@color/primaryWhiteTransparent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="Last Name"
+            android:textColor="@color/primaryWhiteTransparent"/>
+        <EditText
+            android:id="@+id/create_account_last_name_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:paddingBottom="15dp"
+            android:inputType="textPersonName"
+            android:backgroundTint="@color/primaryWhiteTransparent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="Mobile no"
+            android:textColor="@color/primaryWhiteTransparent"/>
+        <EditText
+            android:id="@+id/create_account_number_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:text="9586341029"
+            android:paddingBottom="15dp"
+            android:inputType="number"
+            android:maxLength="10"
+            android:backgroundTint="@color/primaryWhiteTransparent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="Email"
+            android:textColor="@color/primaryWhiteTransparent" />
+
+        <EditText
+            android:id="@+id/create_account_email_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="chavdaakash123@gmail.com"
+            android:backgroundTint="@color/primaryWhiteTransparent"
+            android:inputType="textEmailAddress"
+            android:paddingBottom="15dp"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="DOB"
+            android:textColor="@color/primaryWhiteTransparent" />
+
+        <TextView
+            android:id="@+id/create_account_dob_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="15dp"
+            android:hint="Select date of birth"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="Company/Organization/Business name"
+            android:textColor="@color/primaryWhiteTransparent"/>
+        <EditText
+            android:id="@+id/create_account_company_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:paddingBottom="15dp"
+            android:inputType="textPersonName"
+            android:backgroundTint="@color/primaryWhiteTransparent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="Designation"
+            android:textColor="@color/primaryWhiteTransparent"/>
+        <Spinner
+            android:id="@+id/create_account_designation_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:paddingBottom="15dp"
+            android:inputType="textEmailAddress"
+            android:backgroundTint="@color/primaryWhiteTransparent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="Address"
+            android:textColor="@color/primaryWhiteTransparent" />
+
+        <EditText
+            android:id="@+id/create_account_address_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/primaryWhiteTransparent"
+            android:inputType="textPostalAddress"
+            android:paddingBottom="15dp"
+            android:textColor="@color/colorWhite" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="Password"
+            android:textColor="@color/primaryWhiteTransparent" />
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/colorWhite">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/create_account_password_tv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="12345"
+                android:backgroundTint="@color/primaryWhiteTransparent"
+                android:inputType="textPassword"
+                android:paddingBottom="15dp"
+                android:textColor="@color/colorWhite" />
+        </android.support.design.widget.TextInputLayout>
+
+        <!-- Signup Button -->
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/create_account_create_account_btn"
+            android:layout_width="170dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/button"
+            android:foreground="?android:selectableItemBackground"
+            android:padding="12dp"
+            android:text="create account"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</ScrollView>

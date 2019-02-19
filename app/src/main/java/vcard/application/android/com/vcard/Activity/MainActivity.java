@@ -21,8 +21,12 @@ import android.widget.Toolbar;
 
 import java.util.List;
 
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import vcard.application.android.com.vcard.Adapter.SectionPagerAdapter;
 import vcard.application.android.com.vcard.Fragment.HomeFragment;
+import vcard.application.android.com.vcard.Helper.ApiClient;
+import vcard.application.android.com.vcard.Helper.ApiInterface;
 import vcard.application.android.com.vcard.Helper.BottomNavigationViewHelper;
 import vcard.application.android.com.vcard.R;
 import vcard.application.android.com.vcard.Utility.CardItem;
@@ -34,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
     ViewPager viewPager;
     BottomNavigationView bottomNavigationView;
     private static final int CAMERA_PERMISSION = 100;
+    public static PrefConfig prefConfig;
+    public static ApiInterface apiInterface;
+    Retrofit retrofit;
 
     @SuppressLint({"ResourceAsColor", "ResourceType"})
     @Override
@@ -43,6 +50,13 @@ public class MainActivity extends AppCompatActivity {
         sectionPagerAdapter = new SectionPagerAdapter(getSupportFragmentManager());
         viewPager = findViewById(R.id.main_viewPager);
         setUpViewPager(viewPager);
+        prefConfig = new PrefConfig(this);
+
+        retrofit = new Retrofit.Builder().baseUrl(ApiClient.BASE_URL).addConverterFactory(GsonConverterFactory.create()).build();
+
+        apiInterface = retrofit.create(ApiInterface.class);
+
+//        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
 
         if(Build.VERSION.SDK_INT > Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED){
@@ -102,4 +116,15 @@ public class MainActivity extends AppCompatActivity {
         sectionPagerAdapter.addFragment(new HomeFragment());
         viewPager.setAdapter(sectionPagerAdapter);
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(prefConfig.readLoginStatus()){
+
+        }else{
+            startActivity(new Intent(this,WelcomeScreen.class));
+        }
+    }
+
 }

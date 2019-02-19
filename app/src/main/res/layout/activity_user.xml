@@ -40,8 +40,30 @@
                 android:textSize="30sp"
                 android:textAlignment="center"
                 android:text="Profile"/>
-            <Button
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/user_email_tv"
                 android:layout_below="@id/user_name_tv"
+                android:textSize="20sp"
+                android:textAlignment="center"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/user_number_tv"
+                android:layout_below="@id/user_email_tv"
+                android:textSize="20sp"
+                android:textAlignment="center"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/user_company_tv"
+                android:layout_below="@id/user_number_tv"
+                android:textSize="20sp"
+                android:textAlignment="center"/>
+            <Button
+                android:layout_below="@id/user_company_tv"
+                android:id="@+id/user_logout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Logout"
@@ -51,7 +73,7 @@
         <RelativeLayout
             android:id="@+id/relativeBotBar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:layout_alignParentBottom="true">
 
             <android.support.design.widget.BottomNavigationView

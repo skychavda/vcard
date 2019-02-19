@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">VCard</string>
+    <string name="login"><u>Log in Here</u></string>
+    <string name="pref_file">vcard.application.android.com.vcard.preference_file</string>
+    <string name="pref_login_status">vcard.application.android.com.vcard.preference_login_status</string>
+    <string name="pref_user_name">vcard.application.android.com.vcard.preference_user_name</string>
+    <string name="pref_user_email">vcard.application.android.com.vcard.preference_user_email</string>
+    <string name="pref_user_number">vcard.application.android.com.vcard.preference_user_number</string>
+    <string name="pref_user_password">vcard.application.android.com.vcard.preference_user_password</string>
+    <string name="pref_user_company">vcard.application.android.com.vcard.preference_user_company</string>
 </resources>
