@@ -17,7 +17,7 @@
         if ($con->query($sql) === TRUE) {
             $message="ok";
         } else {
-        echo "error";
+        echo $message="error";
         }
     }
     

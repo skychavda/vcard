@@ -1,41 +1,43 @@
 package vcard.application.android.com.vcard.Activity;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.support.v7.widget.SearchView;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import vcard.application.android.com.vcard.Adapter.HomeFragmentRecyclerAdapter;
 import vcard.application.android.com.vcard.Helper.BottomNavigationViewHelper;
-import vcard.application.android.com.vcard.Helper.ImageCompressor;
 import vcard.application.android.com.vcard.R;
 import vcard.application.android.com.vcard.Utility.CardItem;
 
 public class SearchActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
+    HomeFragmentRecyclerAdapter homeFragmentRecyclerAdapter;
     EditText searchEdit;
     ImageButton searchButton;
     RecyclerView searchRecycler;
+    List<CardItem> cardItems;
     DatabaseReference databaseReference;
     FirebaseRecyclerOptions<CardItem> options;
 
@@ -43,12 +45,14 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        searchEdit = findViewById(R.id.search_card_et);
-        searchButton = findViewById(R.id.search_card_btn);
+//        searchEdit = findViewById(R.id.search_card_et);
+//        searchButton = findViewById(R.id.search_card_btn);
         searchRecycler = findViewById(R.id.search_show_recycler_view);
-        databaseReference = FirebaseDatabase.getInstance().getReference("card");
+
         searchRecycler.setHasFixedSize(true);
         searchRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
+        fetchUser("", MainActivity.prefConfig.readUserId());
 
         bottomNavigationView = findViewById(R.id.search_bottomNavigation);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
@@ -76,58 +80,56 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        searchButton.setOnClickListener(new View.OnClickListener() {
+//        searchButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String searchText = searchEdit.getText().toString();
+////                firebaseUserSearch(searchText);
+//            }
+//        });
+
+    }
+    public void fetchUser(String key, int userId){
+        Call<List<CardItem>> call = MainActivity.apiInterface.getCard(key, Integer.parseInt(String.valueOf(userId)));
+        call.enqueue(new Callback<List<CardItem>>() {
             @Override
-            public void onClick(View v) {
-                String searchText = searchEdit.getText().toString();
-                firebaseUserSearch(searchText);
+            public void onResponse(Call<List<CardItem>> call, Response<List<CardItem>> response) {
+                cardItems = response.body();
+                homeFragmentRecyclerAdapter = new HomeFragmentRecyclerAdapter(SearchActivity.this,cardItems);
+                searchRecycler.setAdapter(homeFragmentRecyclerAdapter);
+                homeFragmentRecyclerAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<CardItem>> call, Throwable t) {
+
             }
         });
     }
 
-//    .startAt(searchText).endAt(searchText+"\uf8ff")
-    private void firebaseUserSearch(String searchText) {
-        Query query = databaseReference.orderByChild("name").startAt(searchText).endAt(searchText);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.search,menu);
 
-        options = new FirebaseRecyclerOptions.Builder<CardItem>()
-                .setQuery(query,CardItem.class).build();
+        SearchManager searchManager = (SearchManager)getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView)menu.findItem(R.id.search).getActionView();
 
-        FirebaseRecyclerAdapter<CardItem,SearchViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<CardItem, SearchViewHolder>(options) {
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            protected void onBindViewHolder(@NonNull SearchViewHolder holder, int position, @NonNull CardItem model) {
-                holder.setDetalis(getApplicationContext(),model.getName(),model.getEmail(),model.getNumber(),model.getPicture());
+            public boolean onQueryTextSubmit(String query) {
+                fetchUser(query, MainActivity.prefConfig.readUserId());
+                return false;
             }
 
-            @NonNull
             @Override
-            public SearchViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.search_recycler_view,parent,false);
-                return new SearchViewHolder(view);
+            public boolean onQueryTextChange(String newText) {
+                fetchUser(newText, MainActivity.prefConfig.readUserId());
+                return false;
             }
-        };
-        firebaseRecyclerAdapter.startListening();
-        searchRecycler.setAdapter(firebaseRecyclerAdapter);
-    }
-
-    public static class SearchViewHolder extends RecyclerView.ViewHolder{
-
-        View view;
-        public SearchViewHolder(View itemView) {
-            super(itemView);
-            view = itemView;
-
-        }
-        public void setDetalis(Context context, String userName, String userEmail, String userNumber, String cardImage){
-            TextView user_name = (TextView)view.findViewById(R.id.search_recycler_item_tv_name);
-            TextView user_number = (TextView)view.findViewById(R.id.search_recycler_item_tv_number);
-            TextView user_email = (TextView)view.findViewById(R.id.search_recycler_item_tv_email);
-            ImageView card = (ImageView)view.findViewById(R.id.search_recycler_image);
-
-            user_name.setText(userName);
-            user_email.setText(userEmail);
-            user_number.setText(userNumber);
-//            card.setImageBitmap(ImageCompressor.decodeSampledBitmapFromResource(context.getResources(), Integer.parseInt(Uri.decode(cardImage)),100,100));
-             card.setImageURI(Uri.parse(Uri.decode(cardImage)));
-        }
+        });
+        return true;
     }
 }

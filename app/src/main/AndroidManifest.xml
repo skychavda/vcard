@@ -21,10 +21,13 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Activity.MainActivity" > <intent-filter>
             <action android:name="android.intent.action.MAIN" />
-
+            <action android:name ="android.intent.action.SEARCH"></action>
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter></activity>
-        <activity android:name=".Activity.SearchActivity" />
+        <activity android:name=".Activity.SearchActivity">
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
+        </activity>
         <activity android:name=".Activity.CommunityActivity" />
         <activity android:name=".Activity.FavoriteActivity" />
         <activity android:name=".Activity.UserActivity" />

@@ -98,14 +98,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        TabLayout tabLayout = (TabLayout)findViewById(R.id.main_tabLayout);
-        tabLayout.setupWithViewPager(viewPager);
-
-        //tabLayout.getTabAt(0).setIcon(R.drawable.ic_camera);
-        tabLayout.getTabAt(0).setText("VCard");
-
-        tabLayout.setSelectedTabIndicatorColor(Color.TRANSPARENT);
-
         viewPager.setCurrentItem(1);
 
     }

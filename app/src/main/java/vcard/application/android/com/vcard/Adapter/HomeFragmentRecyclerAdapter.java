@@ -15,12 +15,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import vcard.application.android.com.vcard.Activity.MainActivity;
 import vcard.application.android.com.vcard.Activity.ShowCard;
 import vcard.application.android.com.vcard.R;
 import vcard.application.android.com.vcard.Utility.CardItem;
@@ -28,6 +34,7 @@ import vcard.application.android.com.vcard.Utility.CardItem;
 public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragmentRecyclerAdapter.HomeFragmentHolder> {
 
     List<CardItem> itemList;
+    RequestOptions options;
 //    OnItemClickListner listner;
 //    public interface OnItemClickListner{
 //        void onItemClick(CardItem item);
@@ -37,6 +44,7 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
         this.context=context;
         this.itemList=itemList;
 //        this.listner=listner;
+        options = new RequestOptions().autoClone();
     }
     @NonNull
     @Override
@@ -48,11 +56,10 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
 
     @Override
     public void onBindViewHolder(@NonNull HomeFragmentHolder holder, int position) {
-//        holder.bind(itemList.get(position),listner);
-        holder.tvName.setText(itemList.get(position).getName());
-        holder.tvNumber.setText(itemList.get(position).getNumber());
-        holder.tvEmail.setText(itemList.get(position).getEmail());
-        holder.ivCard.setImageURI(Uri.parse(itemList.get(position).getPicture()));
+        holder.tvName.setText(itemList.get(position).getCompayName());
+        holder.tvEmail.setText(itemList.get(position).getContactEmail1());
+        holder.tvNumber.setText(itemList.get(position).getContactNumber1());
+        Glide.with(context).load(itemList.get(position).getFrontImage()).apply(options).into(holder.ivCard);
     }
 
     @Override
@@ -85,10 +92,11 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
             int position = getAdapterPosition();
             CardItem cardItem = this.cardItems.get(position);
             Intent intent = new Intent(this.ctx,ShowCard.class);
-            intent.putExtra("image",cardItem.getPicture());
-            intent.putExtra("name",cardItem.getName());
-            intent.putExtra("email",cardItem.getEmail());
-            intent.putExtra("number",cardItem.getNumber());
+            intent.putExtra("cardId",cardItem.getCardId());
+            intent.putExtra("image",cardItem.getFrontImage());
+            intent.putExtra("name",cardItem.getCompayName());
+            intent.putExtra("email",cardItem.getContactEmail1());
+            intent.putExtra("number",cardItem.getContactNumber1());
             this.ctx.startActivity(intent);
         }
 
@@ -102,8 +110,18 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
 //                    Toast.makeText(ctx, ""+cardItems.get(position).getCardId(), Toast.LENGTH_SHORT).show();
-                    DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("card").child(cardItems.get(position).getCardId());
-                    databaseReference.removeValue();
+                    Call<CardItem> call = MainActivity.apiInterface.deleteCard(itemList.get(position).getCardId());
+                    call.enqueue(new Callback<CardItem>() {
+                        @Override
+                        public void onResponse(Call<CardItem> call, Response<CardItem> response) {
+                            MainActivity.prefConfig.displayToast("Server Response: " + response.body().getResponse());
+                        }
+
+                        @Override
+                        public void onFailure(Call<CardItem> call, Throwable t) {
+
+                        }
+                    });
                 }
             });
             alertDialog.show();

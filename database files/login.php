@@ -12,12 +12,13 @@
             echo json_encode(array("response"=>$message));
         } else{
             $row = mysqli_fetch_assoc($result);
+            $id = $row['UserId'];
             $name = $row['Name'];
             $email = $row['Email'];
             $number = $row['MobileNumber'];
             $companyName = $row['CompanyName'];
             $message = "ok";
-            echo json_encode(array("response"=>$message,"name"=>$name,"email"=>$email,"number"=>$number,"companyName"=>$companyName));
+            echo json_encode(array("response"=>$message,"id"=>$id,"name"=>$name,"email"=>$email,"number"=>$number,"companyName"=>$companyName));
         }
     }
 ?>

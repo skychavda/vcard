@@ -33,6 +33,10 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import vcard.application.android.com.vcard.Activity.MainActivity;
+import vcard.application.android.com.vcard.Activity.SearchActivity;
 import vcard.application.android.com.vcard.Activity.ShowCard;
 import vcard.application.android.com.vcard.Adapter.HomeFragmentRecyclerAdapter;
 import vcard.application.android.com.vcard.R;
@@ -43,41 +47,42 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     List<CardItem> list = new ArrayList<>();
 
-    DatabaseReference databaseCard;
+    HomeFragmentRecyclerAdapter homeFragmentRecyclerAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragement_home,container,false);
         recyclerView = view.findViewById(R.id.home_fragment_recyclerView);
-        databaseCard = FirebaseDatabase.getInstance().getReference("card");
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        fetchUser("", Integer.toString(MainActivity.prefConfig.readUserId()));
         return view;
+    }
+
+    public void fetchUser(String key, String userId){
+        Call<List<CardItem>> call = MainActivity.apiInterface.getCard(key, Integer.parseInt(userId));
+        call.enqueue(new Callback<List<CardItem>>() {
+            @Override
+            public void onResponse(Call<List<CardItem>> call, retrofit2.Response<List<CardItem>> response) {
+                list = response.body();
+                homeFragmentRecyclerAdapter = new HomeFragmentRecyclerAdapter(getContext(),list);
+                recyclerView.setAdapter(homeFragmentRecyclerAdapter);
+                homeFragmentRecyclerAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<List<CardItem>> call, Throwable t) {
+
+            }
+        });
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
-        databaseCard.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                list.clear();
-                for (DataSnapshot cardSnapshot : dataSnapshot.getChildren()) {
-                    CardItem cardItem = cardSnapshot.getValue(CardItem.class);
-                    list.add(cardItem);
-                }
 
-                HomeFragmentRecyclerAdapter recyclerAdapter = new HomeFragmentRecyclerAdapter(getContext(), list);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(recyclerAdapter);
-//                Toast.makeText(getContext(), "size: " + list.size(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
-            }
-        });
 
     }
 }

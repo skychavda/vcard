@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.Console;
+
 import vcard.application.android.com.vcard.Helper.BottomNavigationViewHelper;
 import vcard.application.android.com.vcard.R;
 import vcard.application.android.com.vcard.Utility.User;
@@ -21,7 +24,7 @@ import vcard.application.android.com.vcard.Utility.User;
 public class UserActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
-    TextView userName,userEmail,userNumber,userCompny;
+    TextView userName,userEmail,userNumber,userCompny,userId;
     Button button;
     User user;
     @Override
@@ -35,8 +38,10 @@ public class UserActivity extends AppCompatActivity {
         userEmail = findViewById(R.id.user_email_tv);
         userNumber = findViewById(R.id.user_number_tv);
         userCompny = findViewById(R.id.user_company_tv);
+        userId = findViewById(R.id.user_activity_id);
         button = findViewById(R.id.user_logout);
 
+        userId.setText(Integer.toString(MainActivity.prefConfig.readUserId()));
         userEmail.setText(MainActivity.prefConfig.readEmail());
         userName.setText(MainActivity.prefConfig.readName());
         userNumber.setText(MainActivity.prefConfig.readNumber());

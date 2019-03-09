@@ -32,32 +32,12 @@
             android:layout_above="@id/relativeBotBar"
             android:layout_below="@id/relativeTopBar">
 
-           <LinearLayout
-               android:id="@+id/search_linear_layout"
-               android:orientation="horizontal"
-               android:layout_width="match_parent"
-               android:layout_height="50dp">
-               <EditText
-                   android:id="@+id/search_card_et"
-                   android:layout_width="0dp"
-                   android:layout_height="match_parent"
-                   android:layout_weight="3"
-                   android:hint="search...."
-                   android:gravity="center|start" />
-               <ImageButton
-                   android:id="@+id/search_card_btn"
-                   android:layout_width="0dp"
-                   android:layout_height="match_parent"
-                   android:layout_weight="1"
-                   android:background="?android:selectableItemBackground"
-                   android:src="@drawable/ic_search"
-                   />
-           </LinearLayout>
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/search_show_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/search_linear_layout"
+
                 android:layout_marginTop="10dp"/>
         </RelativeLayout>
 

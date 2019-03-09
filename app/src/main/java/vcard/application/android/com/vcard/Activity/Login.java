@@ -47,6 +47,7 @@ public class Login extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.body().getResponse().equals("ok")){
                     MainActivity.prefConfig.writeLoginStatus(true);
+                    MainActivity.prefConfig.writeUserId(response.body().getId());
                     MainActivity.prefConfig.writeName(response.body().getName());
                     MainActivity.prefConfig.writeEmail(userEmail);
                     MainActivity.prefConfig.writeNumber(response.body().getNumber());

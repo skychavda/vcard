@@ -4,65 +4,60 @@ import android.content.Context;
 import android.graphics.Bitmap;
 
 public class CardItem {
-    private String name;
-    private String number;
-    private String cardId;
-    private String picture;
-    private String email;
 
-    public CardItem(){}
+    private String response;
+    private String tmp;
+    private int cardId;
+    private int userId;
+    private String frontImage;
+    private String companyName;
+    private String companyAddress;
+    private String firstName1;
+    private String contactNumber1;
+    private String contactEmail1;
+    private String designation1;
 
-    public CardItem(String name, String number, String cardId, String picture, String email) {
-        this.name = name;
-        this.number = number;
-        this.cardId = cardId;
-        this.picture = picture;
-        this.email = email;
+    public String getResponse() {
+        return response;
     }
 
-    public String getEmail() {
-        return email;
+    public String getTmp() {
+        return tmp;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-
-    public String getPicture() {
-        return picture;
-    }
-
-    public void setPicture(String picture) {
-        this.picture = picture;
-    }
-
-    Context context;
-
-    public CardItem(Context context){
-        this.context=context;
-    }
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public String getCardId() {
+    public int getCardId() {
         return cardId;
     }
 
-    public void setCardId(String cardId) {
-        this.cardId = cardId;
+    public int getUserId() {
+        return userId;
+    }
+
+    public String getFrontImage() {
+        return frontImage;
+    }
+
+    public String getCompayName() {
+        return companyName;
+    }
+
+    public String getCompanyAddress() {
+        return companyAddress;
+    }
+
+    public String getFirstName1() {
+        return firstName1;
+    }
+
+    public String getContactNumber1() {
+        return contactNumber1;
+    }
+
+    public String getContactEmail1() {
+        return contactEmail1;
+    }
+
+    public String getDesignation1() {
+        return designation1;
     }
 }

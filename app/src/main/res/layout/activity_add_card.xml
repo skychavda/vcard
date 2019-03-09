@@ -91,6 +91,7 @@
                 <EditText
                     android:id="@+id/add_card_contact_editView"
                     android:layout_width="0dp"
+                    android:text="1234567890"
                     android:layout_height="wrap_content"
                     android:layout_weight="3" />
             </LinearLayout>
@@ -112,7 +113,74 @@
                 <EditText
                     android:id="@+id/add_card_email_editView"
                     android:layout_width="0dp"
+                    android:text="akash@gmail.com"
                     android:layout_height="wrap_content"
+                    android:layout_weight="3" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="23dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|left"
+                    android:paddingStart="10dp"
+                    android:text="Person"
+                    android:textAppearance="?android:textAppearanceMedium" />
+
+                <EditText
+                    android:id="@+id/add_card_person_editView"
+                    android:layout_width="0dp"
+                    android:text="akash"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="23dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|left"
+                    android:paddingStart="10dp"
+                    android:text="Designation"
+                    android:textAppearance="?android:textAppearanceMedium" />
+
+                <EditText
+                    android:id="@+id/add_card_designation_editView"
+                    android:layout_width="0dp"
+                    android:text="engineer"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="23dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center|left"
+                    android:paddingStart="10dp"
+                    android:text="Address"
+                    android:textAppearance="?android:textAppearanceMedium" />
+
+                <EditText
+                    android:id="@+id/add_card_address_editView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="somewhere"
                     android:layout_weight="3" />
             </LinearLayout>
 
@@ -227,6 +295,11 @@
                     <!--android:layout_height="wrap_content"-->
                     <!--android:layout_weight="3" />-->
             <!--</LinearLayout>-->
+            <TextView
+                android:id="@+id/add_card_image_uri"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="imageuri"/>
         </LinearLayout>
     </ScrollView>
     <Button

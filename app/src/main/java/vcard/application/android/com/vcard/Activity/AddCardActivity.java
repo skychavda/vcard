@@ -18,9 +18,11 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -42,6 +44,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.iceteck.silicompressorr.FileUtils;
 import com.iceteck.silicompressorr.SiliCompressor;
 
 import java.io.ByteArrayOutputStream;
@@ -54,8 +57,15 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import id.zelory.compressor.Compressor;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import vcard.application.android.com.vcard.BackgroundAsync.BackgroundWorker;
 import vcard.application.android.com.vcard.BuildConfig;
+import vcard.application.android.com.vcard.Helper.ApiInterface;
 import vcard.application.android.com.vcard.R;
 import vcard.application.android.com.vcard.Utility.CardItem;
 
@@ -65,15 +75,18 @@ public class AddCardActivity extends AppCompatActivity {
     StorageReference storageReference;
     DatabaseReference databaseCard;
     ImageView card;
-    TextView extractText;
+    TextView extractText, imageUritv;
     TextRecognizer detector;
     //    String filePath
+    Bitmap bitmap, bitmap2;
+    //    Button addCard;
     private byte[] uploadBytes;
-    EditText company, email, phone;
+    EditText company, email, phone, personName, address, designation;
     private Uri imageUri, compressedImageUri;
     private static final String SAVED_INSTANCE_URI = "uri";
     private static final String SAVED_INSTANCE_RESULT = "result";
     private static final int REQUEST_WRITE_PERMISSION = 20;
+    File photo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +97,12 @@ public class AddCardActivity extends AppCompatActivity {
         email = findViewById(R.id.add_card_email_editView);
         phone = findViewById(R.id.add_card_contact_editView);
         card = findViewById(R.id.add_card_imageView);
+        personName = findViewById(R.id.add_card_person_editView);
+        address = findViewById(R.id.add_card_address_editView);
+        designation = findViewById(R.id.add_card_designation_editView);
+//        addCard = findViewById(R.id.add_card_add_card_btn);
+        imageUritv = findViewById(R.id.add_card_image_uri);
+
 
         storageReference = FirebaseStorage.getInstance().getReference();
         detector = new TextRecognizer.Builder(getApplicationContext()).build();
@@ -118,8 +137,9 @@ public class AddCardActivity extends AppCompatActivity {
             dir = new File(Environment.getExternalStorageDirectory().getPath() + "/VCard");
             dir.mkdir();
         }
-        File photo = new File(dir, "VCard_" + timeSpan + ".jpg");
+        photo = new File(dir, "VCard_" + timeSpan + ".jpg");
         imageUri = FileProvider.getUriForFile(AddCardActivity.this, BuildConfig.APPLICATION_ID + ".provider", photo);
+//        imageUritv.setText(String.valueOf(imageUri));
         picture.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(picture, CAMERA_REQUEST);
     }
@@ -131,7 +151,8 @@ public class AddCardActivity extends AppCompatActivity {
             card.setImageURI(imageUri);
             launchMediaScanIntent();
             try {
-                Bitmap bitmap = decodeBitmapUri(this, imageUri);
+                bitmap2 = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                bitmap = decodeBitmapUri(this, imageUri);
                 if (detector.isOperational() && bitmap != null) {
                     Frame frame = new Frame.Builder().setBitmap(bitmap).build();
                     SparseArray<TextBlock> textBlocks = detector.detect(frame);
@@ -225,64 +246,46 @@ public class AddCardActivity extends AppCompatActivity {
                 .openInputStream(uri), null, bmOptions);
     }
 
+    private String imageToString() {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap2.compress(Bitmap.CompressFormat.JPEG, 60, byteArrayOutputStream);
+        byte[] imageByte = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(imageByte, Base64.DEFAULT);
+    }
+
     public void AddCard(View view) {
-        String image = imageUri.toString();
-        String company_name = company.getText().toString();
-        String emailAddress = email.getText().toString();
-        String contact = phone.getText().toString();
+//        String image = imageToString();
+        int userId = MainActivity.prefConfig.readUserId();
+        String company_Name = company.getText().toString();
+        String contact_Email1 = email.getText().toString();
+        String contact_Number1 = phone.getText().toString();
+        String person_Name1 = personName.getText().toString();
+        String company_Address = address.getText().toString();
+        String designation_1 = designation.getText().toString();
 
+//        RequestBody userId = RequestBody.create(MultipartBody.FORM, String.valueOf(MainActivity.prefConfig.readUserId()));
+        RequestBody companyName = RequestBody.create(MediaType.parse("multipart/form-data"), company_Name);
+        RequestBody companyAddress = RequestBody.create(MediaType.parse("multipart/form-data"), company_Address);
+        RequestBody contactEmail1 = RequestBody.create(MediaType.parse("multipart/form-data"), contact_Email1);
+        RequestBody contactNumber1 = RequestBody.create(MediaType.parse("multipart/form-data"), contact_Number1);
+        RequestBody personName1 = RequestBody.create(MediaType.parse("multipart/form-data"), person_Name1);
+        RequestBody designation1 = RequestBody.create(MediaType.parse("multipart/form-data"), designation_1);
+        RequestBody imageFile = RequestBody.create(MediaType.parse("multipart/form-data"), photo);
 
-        if (!TextUtils.isEmpty(company_name)) {
-            uploadNewPhoto(imageUri);
-            String id = databaseCard.push().getKey();
-            CardItem cardItem = new CardItem(company_name, contact, id, image, emailAddress);
-            databaseCard.child(id).setValue(cardItem);
-            Toast.makeText(this, "Uploded", Toast.LENGTH_SHORT).show();
-        }
-    }
+        MultipartBody.Part body = MultipartBody.Part.createFormData("image", photo.getName(), imageFile);
 
-    private String uploadNewPhoto(Uri imagePath) {
-        BackgroundImageResize backgroundImageResize = new BackgroundImageResize(null);
-        return String.valueOf(backgroundImageResize.execute(imagePath));
-    }
+        Call<CardItem> call = MainActivity.apiInterface.addCard(userId, companyName,companyAddress,personName1,contactNumber1,contactEmail1,designation1);
+        call.enqueue(new Callback<CardItem>() {
+            @Override
+            public void onResponse(Call<CardItem> call, Response<CardItem> response) {
+                MainActivity.prefConfig.displayToast("Server Response: " + response.body().getResponse());
 
-    public class BackgroundImageResize extends AsyncTask<Uri, Integer, byte[]> {
-        Bitmap bitmap;
-
-        public BackgroundImageResize(Bitmap bitmap) {
-            this.bitmap = bitmap;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected byte[] doInBackground(Uri... uris) {
-            if (bitmap == null) {
-                try {
-                    bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), uris[0]);
-                } catch (IOException e) {
-                    Log.e("AddCardActivity", "doInBackground IOException" + e.getMessage());
-                }
             }
-            byte[] bytes = null;
-            bytes = getByteFromBitmap(bitmap, 80);
-            return bytes;
-        }
 
-        @Override
-        protected void onPostExecute(byte[] bytes) {
-            super.onPostExecute(bytes);
-            uploadBytes = bytes;
-        }
+            @Override
+            public void onFailure(Call<CardItem> call, Throwable t) {
 
-    }
-
-    public static byte[] getByteFromBitmap(Bitmap bitmap, int quality) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, stream);
-        return stream.toByteArray();
+            }
+        });
     }
 }

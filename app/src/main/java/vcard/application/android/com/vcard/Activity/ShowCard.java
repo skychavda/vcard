@@ -17,6 +17,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
+import vcard.application.android.com.vcard.Adapter.HomeFragmentRecyclerAdapter;
 import vcard.application.android.com.vcard.R;
 import vcard.application.android.com.vcard.Utility.CardItem;
 
@@ -40,9 +41,10 @@ public class ShowCard extends AppCompatActivity {
         message = findViewById(R.id.show_card_message);
         address = findViewById(R.id.show_card_company_address);
         companyEmail = findViewById(R.id.show_card_company_email);
-        cardId = FirebaseDatabase.getInstance().getReference().child("card").getKey();
 
-        imageView.setImageURI(Uri.parse(getIntent().getStringExtra("image")));
+        cardId = getIntent().getStringExtra("cardId");
+
+//        imageView.setImage;
         name.setText(getIntent().getStringExtra("name"));
         number.setText(getIntent().getStringExtra("number"));
         companyEmail.setText(getIntent().getStringExtra("email"));
