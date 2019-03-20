@@ -34,6 +34,7 @@ public class WelcomeScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_AppCompat_DayNight_NoActionBar);
         setContentView(R.layout.activity_welcome_screen);
         mViewPager = findViewById(R.id.welcome_screen_viewPager);
         mDotLayout = findViewById(R.id.welcome_screen_dots);

@@ -1,9 +1,13 @@
 package vcard.application.android.com.vcard.Activity;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 
 import android.graphics.BitmapFactory;
@@ -29,23 +33,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.toolbox.StringRequest;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.text.Text;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.iceteck.silicompressorr.FileUtils;
-import com.iceteck.silicompressorr.SiliCompressor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -53,6 +45,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,17 +63,18 @@ import vcard.application.android.com.vcard.BuildConfig;
 import vcard.application.android.com.vcard.Helper.ApiInterface;
 import vcard.application.android.com.vcard.R;
 import vcard.application.android.com.vcard.Utility.CardItem;
+import vcard.application.android.com.vcard.Utility.UploadedCard;
 
 public class AddCardActivity extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST = 100;
-    StorageReference storageReference;
-    DatabaseReference databaseCard;
     ImageView card;
     TextView extractText, imageUritv;
     TextRecognizer detector;
     //    String filePath
     Bitmap bitmap, bitmap2;
+    File file;
+    String imagePath;
     //    Button addCard;
     private byte[] uploadBytes;
     EditText company, email, phone, personName, address, designation;
@@ -87,12 +83,12 @@ public class AddCardActivity extends AppCompatActivity {
     private static final String SAVED_INSTANCE_RESULT = "result";
     private static final int REQUEST_WRITE_PERMISSION = 20;
     File photo;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_card);
-        databaseCard = FirebaseDatabase.getInstance().getReference("card");
         company = findViewById(R.id.add_card_name_textView);
         email = findViewById(R.id.add_card_email_editView);
         phone = findViewById(R.id.add_card_contact_editView);
@@ -104,7 +100,6 @@ public class AddCardActivity extends AppCompatActivity {
         imageUritv = findViewById(R.id.add_card_image_uri);
 
 
-        storageReference = FirebaseStorage.getInstance().getReference();
         detector = new TextRecognizer.Builder(getApplicationContext()).build();
         ActivityCompat.requestPermissions(AddCardActivity.this, new
                 String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
@@ -149,7 +144,9 @@ public class AddCardActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST) {
             card.setImageURI(imageUri);
+//            file = new File(imagePath);
             launchMediaScanIntent();
+//            imagePath = getRealPathFromURIPath(imageUri);
             try {
                 bitmap2 = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
                 bitmap = decodeBitmapUri(this, imageUri);
@@ -183,6 +180,18 @@ public class AddCardActivity extends AppCompatActivity {
             finish();
         }
     }
+
+//    private String getRealPathFromURIPath(Uri contentUri) {
+//        String[] proj = {MediaStore.Images.Media.DATA};
+////        CursorLoader loader = new CursorLoader(contentUri, proj, null, null, null);
+//        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+//        assert cursor != null;
+//        cursor.moveToFirst();
+//        int column_index = cursor.getColumnIndex(proj[0]);
+//        String result = cursor.getString(column_index);
+//        cursor.close();
+//        return result;
+//    }
 
     public void extractName(String str) {
         final String NAME_REGX = "^([A-Z]([a-z]*|\\.) *){1,2}([A-Z][a-z]+-?)+$";
@@ -246,46 +255,54 @@ public class AddCardActivity extends AppCompatActivity {
                 .openInputStream(uri), null, bmOptions);
     }
 
-    private String imageToString() {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap2.compress(Bitmap.CompressFormat.JPEG, 60, byteArrayOutputStream);
-        byte[] imageByte = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(imageByte, Base64.DEFAULT);
-    }
+//    private String imageToString() {
+//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//        bitmap2.compress(Bitmap.CompressFormat.JPEG, 60, byteArrayOutputStream);
+//        byte[] imageByte = byteArrayOutputStream.toByteArray();
+//        return Base64.encodeToString(imageByte, Base64.DEFAULT);
+//    }
 
     public void AddCard(View view) {
-//        String image = imageToString();
-        int userId = MainActivity.prefConfig.readUserId();
+        int userID = MainActivity.prefConfig.readUserId();
         String company_Name = company.getText().toString();
         String contact_Email1 = email.getText().toString();
         String contact_Number1 = phone.getText().toString();
         String person_Name1 = personName.getText().toString();
         String company_Address = address.getText().toString();
         String designation_1 = designation.getText().toString();
+        File file = new File(String.valueOf(photo));
 
-//        RequestBody userId = RequestBody.create(MultipartBody.FORM, String.valueOf(MainActivity.prefConfig.readUserId()));
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+
+        RequestBody userId = RequestBody.create(MultipartBody.FORM, String.valueOf(MainActivity.prefConfig.readUserId()));
         RequestBody companyName = RequestBody.create(MediaType.parse("multipart/form-data"), company_Name);
         RequestBody companyAddress = RequestBody.create(MediaType.parse("multipart/form-data"), company_Address);
         RequestBody contactEmail1 = RequestBody.create(MediaType.parse("multipart/form-data"), contact_Email1);
         RequestBody contactNumber1 = RequestBody.create(MediaType.parse("multipart/form-data"), contact_Number1);
         RequestBody personName1 = RequestBody.create(MediaType.parse("multipart/form-data"), person_Name1);
         RequestBody designation1 = RequestBody.create(MediaType.parse("multipart/form-data"), designation_1);
-        RequestBody imageFile = RequestBody.create(MediaType.parse("multipart/form-data"), photo);
 
-        MultipartBody.Part body = MultipartBody.Part.createFormData("image", photo.getName(), imageFile);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
 
-        Call<CardItem> call = MainActivity.apiInterface.addCard(userId, companyName,companyAddress,personName1,contactNumber1,contactEmail1,designation1);
-        call.enqueue(new Callback<CardItem>() {
+
+        Call<UploadedCard> call = MainActivity.apiInterface.addCard(userID,body);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading image");
+        progressDialog.show();
+
+        call.enqueue(new Callback<UploadedCard>() {
             @Override
-            public void onResponse(Call<CardItem> call, Response<CardItem> response) {
-                MainActivity.prefConfig.displayToast("Server Response: " + response.body().getResponse());
-
+            public void onResponse(Call<UploadedCard> call, Response<UploadedCard> response) {
+                if(response.isSuccessful()){
+                    progressDialog.cancel();
+                    MainActivity.prefConfig.displayToast("Server Response: "+response.body().getResponse());
+                }
             }
 
             @Override
-            public void onFailure(Call<CardItem> call, Throwable t) {
+            public void onFailure(Call<UploadedCard> call, Throwable t) {
 
             }
         });
-    }
+        }
 }

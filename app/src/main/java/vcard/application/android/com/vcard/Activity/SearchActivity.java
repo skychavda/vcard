@@ -34,19 +34,14 @@ public class SearchActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
     HomeFragmentRecyclerAdapter homeFragmentRecyclerAdapter;
-    EditText searchEdit;
-    ImageButton searchButton;
     RecyclerView searchRecycler;
     List<CardItem> cardItems;
-    DatabaseReference databaseReference;
-    FirebaseRecyclerOptions<CardItem> options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_AppCompat_Light_DarkActionBar);
         setContentView(R.layout.activity_search);
-//        searchEdit = findViewById(R.id.search_card_et);
-//        searchButton = findViewById(R.id.search_card_btn);
         searchRecycler = findViewById(R.id.search_show_recycler_view);
 
         searchRecycler.setHasFixedSize(true);
@@ -79,14 +74,6 @@ public class SearchActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-//        searchButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String searchText = searchEdit.getText().toString();
-////                firebaseUserSearch(searchText);
-//            }
-//        });
 
     }
     public void fetchUser(String key, int userId){

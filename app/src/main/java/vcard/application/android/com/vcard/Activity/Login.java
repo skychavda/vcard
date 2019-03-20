@@ -24,6 +24,7 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_AppCompat_Light_NoActionBar);
         setContentView(R.layout.activity_login);
         email = findViewById(R.id.login_email_tv);
         password = findViewById(R.id.login_password_tv);
@@ -48,10 +49,11 @@ public class Login extends AppCompatActivity {
                 if(response.body().getResponse().equals("ok")){
                     MainActivity.prefConfig.writeLoginStatus(true);
                     MainActivity.prefConfig.writeUserId(response.body().getId());
-                    MainActivity.prefConfig.writeName(response.body().getName());
+                    MainActivity.prefConfig.writeName(response.body().getFirstName()+" "+response.body().getLastName());
                     MainActivity.prefConfig.writeEmail(userEmail);
                     MainActivity.prefConfig.writeNumber(response.body().getNumber());
                     MainActivity.prefConfig.writeCompany(response.body().getCompanyName());
+                    MainActivity.prefConfig.writeAddress(response.body().getAddress());
                     MainActivity.prefConfig.displayToast("Login");
                     startActivity(new Intent(Login.this,MainActivity.class));
                 }else if(response.body().getResponse().equals("fail")){

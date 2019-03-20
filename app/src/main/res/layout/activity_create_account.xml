@@ -94,21 +94,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="DOB"
-            android:textColor="@color/primaryWhiteTransparent" />
-
-        <TextView
-            android:id="@+id/create_account_dob_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="15dp"
-            android:hint="Select date of birth"
-            android:textColor="@color/colorWhite" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:text="Company/Organization/Business name"
             android:textColor="@color/primaryWhiteTransparent"/>
         <EditText
@@ -118,21 +103,6 @@
             android:textColor="@color/colorWhite"
             android:paddingBottom="15dp"
             android:inputType="textPersonName"
-            android:backgroundTint="@color/primaryWhiteTransparent"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="Designation"
-            android:textColor="@color/primaryWhiteTransparent"/>
-        <Spinner
-            android:id="@+id/create_account_designation_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorWhite"
-            android:paddingBottom="15dp"
-            android:inputType="textEmailAddress"
             android:backgroundTint="@color/primaryWhiteTransparent"/>
 
         <TextView

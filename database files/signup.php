@@ -1,25 +1,35 @@
 <?php
     require "init.php";
-    $name = $_GET["userName"];
-    $password = $_GET["password"];
-    $mobileNumber = $_GET["number"];
-    $email = $_GET["email"];
+    $firstname = $_POST["firstName"];
+    $lastname = $_POST["lastName"];
+    $password = $_POST["password"];
+    $mobileNumber = $_POST["number"];
+    $email = $_POST["email"];
+    $address = $_POST["address"];
+    $companyName = $_POST["companyName"];
     $sql = "SELECT * FROM User WHERE Email='$email'";
     $result = mysqli_query($con,$sql);
     $message="";
 
-    if(mysqli_num_rows($result)>0) {
-        $message = "exist";
-    }else{
-        $sql = "INSERT INTO User (Email, Password, MobileNumber, Name)
-        VALUES ('$email','$password','$mobileNumber','$name')";
+    if($con){
+        if(mysqli_num_rows($result)>0) {
+            $message = "user exist";
+            echo json_encode(array("response"=>$message));
+        }else{
+            $sql = "INSERT INTO User (Email, Password, MobileNumber, FirstName, LastName, Address, CompanyName)
+            VALUES ('$email','$password','$mobileNumber','$firstname','$lastname','$address','$companyName')";
 
-        if ($con->query($sql) === TRUE) {
-            $message="ok";
-        } else {
-        echo $message="error";
+            if ($con->query($sql) === TRUE) {
+                $message="Account created";
+                echo json_encode(array("response"=>$message));
+            } else {
+            $message="error";
+            echo json_encode(array("response"=>$message));
+            }
         }
+    } else {
+        $message="error";
+        echo json_encode(array("response"=>$message));
     }
     
-    $conn->close();
 ?>

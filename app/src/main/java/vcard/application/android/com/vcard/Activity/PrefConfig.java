@@ -56,6 +56,11 @@ public class PrefConfig {
         editor.putString(context.getString(R.string.pref_user_company),companyName);
         editor.commit();
     }
+    public void writeAddress(String address){
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(context.getString(R.string.pref_user_address),address);
+        editor.commit();
+    }
 
     public int readUserId(){
         return  sharedPreferences.getInt(context.getString(R.string.pref_user_id),0);
@@ -76,6 +81,11 @@ public class PrefConfig {
     public String readCompany(){
         return  sharedPreferences.getString(context.getString(R.string.pref_user_company),"User");
     }
+
+    public String readAddress(){
+        return  sharedPreferences.getString(context.getString(R.string.pref_user_address),"User");
+    }
+
 
     public void displayToast(String message){
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();

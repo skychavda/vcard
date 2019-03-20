@@ -1,13 +1,11 @@
 <?php
-$host = "localhost";
-$user_name = "id8741352_vcardscanner";
-$user_password = "vcard@123";
-$db_name = "id8741352_vcardmaster";
+$host = "mysql.vcardscanner.gq";
+$user_name = "vcardscanner";
+$user_password = "vcard123@";
+$db_name = "vcardscanner";
 
 $con = mysqli_connect($host,$user_name,$user_password,$db_name);
 
-if($con)
-echo "success..";
-else
+if(!$con)
 echo "failed";
 ?>

@@ -24,7 +24,7 @@ import vcard.application.android.com.vcard.Utility.User;
 public class UserActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
-    TextView userName,userEmail,userNumber,userCompny,userId;
+    TextView userName,userEmail,userNumber,userCompny,address;
     Button button;
     User user;
     @Override
@@ -38,14 +38,14 @@ public class UserActivity extends AppCompatActivity {
         userEmail = findViewById(R.id.user_email_tv);
         userNumber = findViewById(R.id.user_number_tv);
         userCompny = findViewById(R.id.user_company_tv);
-        userId = findViewById(R.id.user_activity_id);
+        address = findViewById(R.id.user_address_tv);
         button = findViewById(R.id.user_logout);
 
-        userId.setText(Integer.toString(MainActivity.prefConfig.readUserId()));
         userEmail.setText(MainActivity.prefConfig.readEmail());
         userName.setText(MainActivity.prefConfig.readName());
         userNumber.setText(MainActivity.prefConfig.readNumber());
         userCompny.setText(MainActivity.prefConfig.readCompany());
+        address.setText(MainActivity.prefConfig.readAddress());
 
         Menu menu = bottomNavigationView.getMenu();
         MenuItem menuItem = menu.getItem(4);
