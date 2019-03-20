@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -28,6 +30,7 @@ public class ShowCard extends AppCompatActivity {
     CardItem cardItem;
     ImageView imageView;
     String cardId;
+    RequestOptions options;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +44,14 @@ public class ShowCard extends AppCompatActivity {
         message = findViewById(R.id.show_card_message);
         address = findViewById(R.id.show_card_company_address);
         companyEmail = findViewById(R.id.show_card_company_email);
-
+        options = new RequestOptions().autoClone();
         cardId = getIntent().getStringExtra("cardId");
 
 //        imageView.setImage;
         name.setText(getIntent().getStringExtra("name"));
         number.setText(getIntent().getStringExtra("number"));
         companyEmail.setText(getIntent().getStringExtra("email"));
+        Glide.with(this).load(getIntent().getStringExtra("image")).apply(options).into(imageView);
 
 
         number.setOnClickListener(new View.OnClickListener() {

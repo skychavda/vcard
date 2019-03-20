@@ -4,12 +4,12 @@
     ini_set('display_startup_errors', 1);
     error_reporting(0);
     $userId = $_POST['userID'];
-    // $companyName = $_POST['companyName'];
-    // $companyAddress = $_POST['companyAddress'];
-    // $firstName1 = $_POST['firstName1'];
-    // $contactNumber1 = $_POST['contactNumber1'];
-    // $contactEmail1 = $_POST['contactEmail1'];
-    // $designation1 = $_POST['designation1'];
+    $companyName = $_POST['companyName'];
+    $companyAddress = $_POST['companyAddress'];
+    $firstName1 = $_POST['firstName1'];
+    $contactNumber1 = $_POST['contactNumber1'];
+    $contactEmail1 = $_POST['contactEmail1'];
+    $designation1 = $_POST['designation1'];
     $message = "";
 
 // Check if image file is a actual image or fake image
@@ -31,7 +31,7 @@ if($con) {
     } else {
       // '$companyName', '$companyAddress', '$firstName1', '$contactNumber1', '$contactEmail1', '$designation1'
         $image = $_FILES['image']['name'];
-        $sql = "INSERT INTO Cards (UserId, FrontImage) VALUES ('$userId', '$image')";
+        $sql = "INSERT INTO Cards (UserId, FrontImage, CompanyName, CompanyAddress, FirstName1, ContactNumber1, ContactEmail1, Designation1) VALUES ('$userId', '$image', '$companyName', '$companyAddress', '$firstName1', '$contactNumber1', '$contactEmail1', '$designation1')";
         mysqli_query($con,$sql);
         if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
             $message =  "The file ". basename( $_FILES["image"]["name"]). " has been uploaded.";
@@ -42,25 +42,6 @@ if($con) {
             echo json_encode(array("response"=>$message));
         }
       }
-
-
-    // if($check !== false) {
-    //   $message = "File is an image - " . $check["mime"] . ".";
-    //   $uploadOk = 1;
-    //   echo json_encode(array("response"=>$message));
-    // } else {
-    //   $message =  "File is not an image.";
-    //   $uploadOk = 0;
-    //   echo json_encode(array("response"=>$message));
-    // }
-// Allow certain file formats
-// else if ($_FILES["image"]["size"] > 500000) {
-//   $message = "Sorry, your file is too large.";
-//   $uploadOk = 0;
-//   echo json_encode(array("response"=>$message));
-// }
-
-// Check if $uploadOk is set to 0 by an error
 
 }
 function compressImage($source,$destination,$quality){

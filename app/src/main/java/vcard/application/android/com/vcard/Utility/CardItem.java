@@ -14,8 +14,8 @@ public class CardItem {
     private String companyAddress;
     private String firstName1;
     private String contactNumber1;
-    private String contactEmail1;
-    private String designation1;
+    private String contactEmail;
+    private String designation;
 
     public String getResponse() {
         return response;
@@ -53,11 +53,11 @@ public class CardItem {
         return contactNumber1;
     }
 
-    public String getContactEmail1() {
-        return contactEmail1;
+    public String getContactEmail() {
+        return contactEmail;
     }
 
-    public String getDesignation1() {
-        return designation1;
+    public String getDesignation() {
+        return designation;
     }
 }

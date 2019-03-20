@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -45,7 +46,7 @@ public class SearchActivity extends AppCompatActivity {
         searchRecycler = findViewById(R.id.search_show_recycler_view);
 
         searchRecycler.setHasFixedSize(true);
-        searchRecycler.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        searchRecycler.setLayoutManager(new GridLayoutManager(this, 2));
 
         fetchUser("", MainActivity.prefConfig.readUserId());
 

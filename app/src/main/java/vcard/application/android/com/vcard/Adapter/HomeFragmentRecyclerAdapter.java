@@ -57,7 +57,7 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
     @Override
     public void onBindViewHolder(@NonNull HomeFragmentHolder holder, int position) {
         holder.tvName.setText(itemList.get(position).getCompayName());
-        holder.tvEmail.setText(itemList.get(position).getContactEmail1());
+        holder.tvEmail.setText(itemList.get(position).getContactEmail());
         holder.tvNumber.setText(itemList.get(position).getContactNumber1());
         Glide.with(context).load(itemList.get(position).getFrontImage()).apply(options).into(holder.ivCard);
     }
@@ -95,13 +95,13 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
             intent.putExtra("cardId",cardItem.getCardId());
             intent.putExtra("image",cardItem.getFrontImage());
             intent.putExtra("name",cardItem.getCompayName());
-            intent.putExtra("email",cardItem.getContactEmail1());
+            intent.putExtra("email",cardItem.getContactEmail());
             intent.putExtra("number",cardItem.getContactNumber1());
             this.ctx.startActivity(intent);
         }
 
         @Override
-        public boolean onLongClick(View v) {
+        public boolean onLongClick(final View v) {
             final int position = getAdapterPosition();
             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(ctx);
             alertDialog.setTitle("Delete");
@@ -115,6 +115,8 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
                         @Override
                         public void onResponse(Call<CardItem> call, Response<CardItem> response) {
                             MainActivity.prefConfig.displayToast("Server Response: " + response.body().getResponse());
+                            Intent i = new Intent(v.getContext(), MainActivity.class);
+                            v.getContext().startActivity(i);
                         }
 
                         @Override

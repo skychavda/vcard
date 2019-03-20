@@ -46,12 +46,12 @@ public interface ApiInterface {
     @POST("uploadImage.php")
     Call<UploadedCard> addCard(
             @Part("userID") int userID,
-            @Part MultipartBody.Part Image);
-//            @Part("companyName") RequestBody companyName,
-//            @Part("companyAddress") RequestBody companyAddress,
-//            @Part("firstName1") RequestBody firstName1,
-//            @Part("contactNumber1") RequestBody contactNumber1,
-//            @Part("contactEmail1") RequestBody contactEmail1,
-//            @Part("designation1") RequestBody designation1);
+            @Part MultipartBody.Part Image,
+            @Part("companyName") RequestBody companyName,
+            @Part("companyAddress") RequestBody companyAddress,
+            @Part("firstName1") RequestBody firstName1,
+            @Part("contactNumber1") RequestBody contactNumber1,
+            @Part("contactEmail1") RequestBody contactEmail1,
+            @Part("designation1") RequestBody designation1);
 
 }

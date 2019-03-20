@@ -69,7 +69,7 @@ public class AddCardActivity extends AppCompatActivity {
 
     private static final int CAMERA_REQUEST = 100;
     ImageView card;
-    TextView extractText, imageUritv;
+    TextView extractText;
     TextRecognizer detector;
     //    String filePath
     Bitmap bitmap, bitmap2;
@@ -96,8 +96,6 @@ public class AddCardActivity extends AppCompatActivity {
         personName = findViewById(R.id.add_card_person_editView);
         address = findViewById(R.id.add_card_address_editView);
         designation = findViewById(R.id.add_card_designation_editView);
-//        addCard = findViewById(R.id.add_card_add_card_btn);
-        imageUritv = findViewById(R.id.add_card_image_uri);
 
 
         detector = new TextRecognizer.Builder(getApplicationContext()).build();
@@ -160,6 +158,14 @@ public class AddCardActivity extends AppCompatActivity {
                         //extract scanned text blocks here
                         TextBlock tBlock = textBlocks.valueAt(index);
                         blocks = blocks + tBlock.getValue() + "\n" + "\n";
+                        for (Text line : tBlock.getComponents()) {
+                            //extract scanned text lines here
+                            lines = lines + line.getValue() + "\n";
+                            for (Text element : line.getComponents()) {
+                                //extract scanned text words here
+                                words = words + element.getValue() + ", ";
+                            }
+                        }
                     }
                     if (textBlocks.size() == 0) {
                         extractText.setText("Scan Failed: Found nothing to scan");
@@ -167,6 +173,8 @@ public class AddCardActivity extends AppCompatActivity {
                         extractName(blocks);
                         extractEmail(blocks);
                         extractPhone(blocks);
+                        extractAddress(lines);
+                        extractDesignation(words);
                     }
                 } else {
                     extractText.setText("Could not set up the detector!");
@@ -180,18 +188,6 @@ public class AddCardActivity extends AppCompatActivity {
             finish();
         }
     }
-
-//    private String getRealPathFromURIPath(Uri contentUri) {
-//        String[] proj = {MediaStore.Images.Media.DATA};
-////        CursorLoader loader = new CursorLoader(contentUri, proj, null, null, null);
-//        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
-//        assert cursor != null;
-//        cursor.moveToFirst();
-//        int column_index = cursor.getColumnIndex(proj[0]);
-//        String result = cursor.getString(column_index);
-//        cursor.close();
-//        return result;
-//    }
 
     public void extractName(String str) {
         final String NAME_REGX = "^([A-Z]([a-z]*|\\.) *){1,2}([A-Z][a-z]+-?)+$";
@@ -222,6 +218,55 @@ public class AddCardActivity extends AppCompatActivity {
             System.out.println(m.group());
             phone.setText(m.group());
         }
+    }
+
+    public void extractAddress(String str) {
+        String keyword1 = "[a-zA-Z]{1}-[0-9]{1,4}";
+        String keyword2 = "Opp";
+        String keyword3 = "Garden";
+        String keyword4 = "Tower";
+        String keyword5 = "Floor";
+        String keyword6 = "Road";
+        String keyword7 = "complex";
+        String keyword8 = "Shop";
+        String keyword9 = "no.";
+        String keyword10 = "park";
+        String keyword11 = "cross";
+        String keyword12 = "Address";
+        String[] keywords = {keyword1, keyword2, keyword3, keyword4, keyword5, keyword6, keyword7, keyword8, keyword9, keyword10, keyword11, keyword12};
+//        for (String keyword:
+//             keywords) {
+//            if(keyword == str){
+//                address.setText(str);
+//            }
+//        }
+        for (int i = 0; i < keywords.length; i++) {
+            if (keywords[i].equals(str)) {
+                address.setText(str);
+            }
+        }
+        address.setText("");
+    }
+
+    public void extractDesignation(String str){
+        String keyword1 = "[a-zA-Z]{1}-[0-9]{1,4}";
+        String keyword2 = "Engineer";
+        String keyword3 = "Computer";
+        String keyword4 = "Graphic";
+        String keyword5 = "Artist";
+        String keyword6 = "Designer";
+        String keyword7 = "Finance";
+        String keyword8 = "Doctor";
+        String keyword9 = "Sr.";
+        String keyword10 = "Dentist";
+        String keyword11 = "Architect";
+        String[] keywords = {keyword1, keyword2, keyword3, keyword4, keyword5, keyword6, keyword7, keyword8, keyword9, keyword10, keyword11};
+        for (int i = 0; i < keywords.length; i++) {
+            if (keywords[i].equals(str)) {
+                designation.setText(str);
+            }
+        }
+        designation.setText("");
     }
 
     @Override
@@ -255,13 +300,6 @@ public class AddCardActivity extends AppCompatActivity {
                 .openInputStream(uri), null, bmOptions);
     }
 
-//    private String imageToString() {
-//        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//        bitmap2.compress(Bitmap.CompressFormat.JPEG, 60, byteArrayOutputStream);
-//        byte[] imageByte = byteArrayOutputStream.toByteArray();
-//        return Base64.encodeToString(imageByte, Base64.DEFAULT);
-//    }
-
     public void AddCard(View view) {
         int userID = MainActivity.prefConfig.readUserId();
         String company_Name = company.getText().toString();
@@ -285,17 +323,19 @@ public class AddCardActivity extends AppCompatActivity {
         MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
 
 
-        Call<UploadedCard> call = MainActivity.apiInterface.addCard(userID,body);
+        Call<UploadedCard> call = MainActivity.apiInterface.addCard(userID, body, companyName, companyAddress, personName1, contactNumber1, contactEmail1, designation1);
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Uploading image");
+        progressDialog.setMessage("please wait...");
         progressDialog.show();
 
         call.enqueue(new Callback<UploadedCard>() {
             @Override
             public void onResponse(Call<UploadedCard> call, Response<UploadedCard> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     progressDialog.cancel();
-                    MainActivity.prefConfig.displayToast("Server Response: "+response.body().getResponse());
+                    MainActivity.prefConfig.displayToast("Server Response: " + response.body().getResponse());
+                    startActivity(new Intent(AddCardActivity.this,MainActivity.class));
                 }
             }
 
@@ -304,5 +344,5 @@ public class AddCardActivity extends AppCompatActivity {
 
             }
         });
-        }
+    }
 }
