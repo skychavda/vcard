@@ -77,7 +77,7 @@ public class AddCardActivity extends AppCompatActivity {
     String imagePath;
     //    Button addCard;
     private byte[] uploadBytes;
-    EditText company, email, phone, personName, address, designation;
+    EditText company, email, phone, personName, address, designation, website;
     private Uri imageUri, compressedImageUri;
     private static final String SAVED_INSTANCE_URI = "uri";
     private static final String SAVED_INSTANCE_RESULT = "result";
@@ -96,6 +96,7 @@ public class AddCardActivity extends AppCompatActivity {
         personName = findViewById(R.id.add_card_person_editView);
         address = findViewById(R.id.add_card_address_editView);
         designation = findViewById(R.id.add_card_designation_editView);
+        website = findViewById(R.id.add_card_website_editView);
 
 
         detector = new TextRecognizer.Builder(getApplicationContext()).build();
@@ -171,10 +172,11 @@ public class AddCardActivity extends AppCompatActivity {
                         extractText.setText("Scan Failed: Found nothing to scan");
                     } else {
                         extractName(blocks);
-                        extractEmail(blocks);
+                        extractEmail(words);
                         extractPhone(blocks);
                         extractAddress(lines);
                         extractDesignation(words);
+                        extractWebsite(words);
                     }
                 } else {
                     extractText.setText("Could not set up the detector!");
@@ -207,6 +209,17 @@ public class AddCardActivity extends AppCompatActivity {
             System.out.println(m.group());
             email.setText(m.group());
         }
+
+//        String[] keywords = {"@gmail.com", "@info.com"};
+//        String[] words = str.split(",");
+//        for(int i=0; i<words.length;i++){
+//            for(int j=0;j<keywords.length;j++){
+//                if(words[i].endsWith(keywords[i])){
+//                    email.setText(words[i]);
+//                }
+//            }
+//        }
+
     }
 
     public void extractPhone(String str) {
@@ -234,21 +247,17 @@ public class AddCardActivity extends AppCompatActivity {
         String keyword11 = "cross";
         String keyword12 = "Address";
         String[] keywords = {keyword1, keyword2, keyword3, keyword4, keyword5, keyword6, keyword7, keyword8, keyword9, keyword10, keyword11, keyword12};
-//        for (String keyword:
-//             keywords) {
-//            if(keyword == str){
-//                address.setText(str);
-//            }
-//        }
-        for (int i = 0; i < keywords.length; i++) {
-            if (keywords[i].equals(str)) {
-                address.setText(str);
+        String[] lines = str.split("\n");
+        for (int i = 0; i < lines.length; i++) {
+            for (int j = 0; j < keywords.length; j++) {
+                if (lines[i].contains(keywords[j])) {
+                    address.setText(lines[i]);
+                }
             }
         }
-        address.setText("");
     }
 
-    public void extractDesignation(String str){
+    public void extractDesignation(String str) {
         String keyword1 = "[a-zA-Z]{1}-[0-9]{1,4}";
         String keyword2 = "Engineer";
         String keyword3 = "Computer";
@@ -260,13 +269,25 @@ public class AddCardActivity extends AppCompatActivity {
         String keyword9 = "Sr.";
         String keyword10 = "Dentist";
         String keyword11 = "Architect";
-        String[] keywords = {keyword1, keyword2, keyword3, keyword4, keyword5, keyword6, keyword7, keyword8, keyword9, keyword10, keyword11};
-        for (int i = 0; i < keywords.length; i++) {
-            if (keywords[i].equals(str)) {
-                designation.setText(str);
+        String[] keywords = {keyword1, keyword2, keyword3, keyword4, keyword5, keyword6, keyword7, keyword8, keyword9, keyword10, keyword11, "Managing", "Director"};
+        String[] words = str.split(",");
+        for (int i = 0; i < words.length; i++) {
+            for (int j = 0; j < keywords.length; j++) {
+                if (words[i].replaceAll("\\s", "").equals(keywords[j])) {
+                    designation.append(words[i].replaceAll("\\s",""));
+                }
             }
         }
-        designation.setText("");
+//        designation.setText("");
+    }
+
+    public void extractWebsite(String str) {
+        String[] array = str.split(",");
+        for (int i = 0; i < array.length; i++) {
+            if (array[i].startsWith("www.") && array[i].endsWith(".com")) {
+                website.setText(array[i]);
+            }
+        }
     }
 
     @Override
@@ -311,8 +332,6 @@ public class AddCardActivity extends AppCompatActivity {
         File file = new File(String.valueOf(photo));
 
         RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
-
-        RequestBody userId = RequestBody.create(MultipartBody.FORM, String.valueOf(MainActivity.prefConfig.readUserId()));
         RequestBody companyName = RequestBody.create(MediaType.parse("multipart/form-data"), company_Name);
         RequestBody companyAddress = RequestBody.create(MediaType.parse("multipart/form-data"), company_Address);
         RequestBody contactEmail1 = RequestBody.create(MediaType.parse("multipart/form-data"), contact_Email1);
@@ -335,7 +354,7 @@ public class AddCardActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     progressDialog.cancel();
                     MainActivity.prefConfig.displayToast("Server Response: " + response.body().getResponse());
-                    startActivity(new Intent(AddCardActivity.this,MainActivity.class));
+                    startActivity(new Intent(AddCardActivity.this, MainActivity.class));
                 }
             }
 
