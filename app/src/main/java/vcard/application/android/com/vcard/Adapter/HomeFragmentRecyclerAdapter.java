@@ -28,6 +28,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import vcard.application.android.com.vcard.Activity.MainActivity;
 import vcard.application.android.com.vcard.Activity.ShowCard;
+import vcard.application.android.com.vcard.Fragment.HomeFragment;
 import vcard.application.android.com.vcard.R;
 import vcard.application.android.com.vcard.Utility.CardItem;
 
@@ -35,15 +36,10 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
 
     List<CardItem> itemList;
     RequestOptions options;
-//    OnItemClickListner listner;
-//    public interface OnItemClickListner{
-//        void onItemClick(CardItem item);
-//    }       OnItemClickListner listner
     Context context;
     public HomeFragmentRecyclerAdapter(Context context, List<CardItem> itemList){
         this.context=context;
         this.itemList=itemList;
-//        this.listner=listner;
         options = new RequestOptions().autoClone();
     }
     @NonNull

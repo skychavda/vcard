@@ -27,9 +27,9 @@ public class SliderAdapter extends PagerAdapter {
     };
 
     public String[] slide_disc = {
-        "Lorem",
-        "Lorem lskdjfl lkdsj",
-        "Lorem"
+            "",
+            "",
+            ""
     };
 
     @Override
@@ -39,14 +39,14 @@ public class SliderAdapter extends PagerAdapter {
 
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
-        return view ==  object;
+        return view == object;
     }
 
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         layoutInflater = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(R.layout.welcome_screen_slider,container,false);
+        View view = layoutInflater.inflate(R.layout.welcome_screen_slider, container, false);
 
         TextView slideHeading = view.findViewById(R.id.welcome_slider_heading_tv);
         TextView slideDisc = view.findViewById(R.id.welcome_slider_disc_tv);

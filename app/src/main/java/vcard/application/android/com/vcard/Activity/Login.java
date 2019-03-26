@@ -19,7 +19,7 @@ public class Login extends AppCompatActivity {
 
     EditText email, password;
     Button login;
-
+    public int errorFlag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,17 @@ public class Login extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userLogin();
+                if(email.getText().toString().length() == 0){
+                    email.setError("Enter email");
+                    errorFlag = 1;
+                }
+                if(password.getText().toString().length() == 0){
+                    password.setError("Enter password");
+                    errorFlag = 1;
+                }
+                if(errorFlag == 0) {
+                    userLogin();
+                }
             }
         });
     }

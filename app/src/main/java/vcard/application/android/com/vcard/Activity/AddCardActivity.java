@@ -38,6 +38,8 @@ import com.google.android.gms.vision.text.Text;
 import com.google.android.gms.vision.text.TextBlock;
 import com.google.android.gms.vision.text.TextRecognizer;
 import com.iceteck.silicompressorr.FileUtils;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -71,14 +73,9 @@ public class AddCardActivity extends AppCompatActivity {
     ImageView card;
     TextView extractText;
     TextRecognizer detector;
-    //    String filePath
     Bitmap bitmap, bitmap2;
-    File file;
-    String imagePath;
-    //    Button addCard;
-    private byte[] uploadBytes;
     EditText company, email, phone, personName, address, designation, website;
-    private Uri imageUri, compressedImageUri;
+    private Uri imageUri;
     private static final String SAVED_INSTANCE_URI = "uri";
     private static final String SAVED_INSTANCE_RESULT = "result";
     private static final int REQUEST_WRITE_PERMISSION = 20;
@@ -97,13 +94,10 @@ public class AddCardActivity extends AppCompatActivity {
         address = findViewById(R.id.add_card_address_editView);
         designation = findViewById(R.id.add_card_designation_editView);
         website = findViewById(R.id.add_card_website_editView);
-
-
         detector = new TextRecognizer.Builder(getApplicationContext()).build();
         ActivityCompat.requestPermissions(AddCardActivity.this, new
                 String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_PERMISSION);
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -142,52 +136,59 @@ public class AddCardActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST) {
-            card.setImageURI(imageUri);
-//            file = new File(imagePath);
-            launchMediaScanIntent();
-//            imagePath = getRealPathFromURIPath(imageUri);
-            try {
-                bitmap2 = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-                bitmap = decodeBitmapUri(this, imageUri);
-                if (detector.isOperational() && bitmap != null) {
-                    Frame frame = new Frame.Builder().setBitmap(bitmap).build();
-                    SparseArray<TextBlock> textBlocks = detector.detect(frame);
-                    String blocks = "";
-                    String lines = "";
-                    String words = "";
-                    for (int index = 0; index < textBlocks.size(); index++) {
-                        //extract scanned text blocks here
-                        TextBlock tBlock = textBlocks.valueAt(index);
-                        blocks = blocks + tBlock.getValue() + "\n" + "\n";
-                        for (Text line : tBlock.getComponents()) {
-                            //extract scanned text lines here
-                            lines = lines + line.getValue() + "\n";
-                            for (Text element : line.getComponents()) {
-                                //extract scanned text words here
-                                words = words + element.getValue() + ", ";
+            CropImage.activity(imageUri).setGuidelines(CropImageView.Guidelines.ON_TOUCH).setAspectRatio(4, 3).start(this);
+        }
+        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+
+            if (resultCode == RESULT_OK) {
+                imageUri = result.getUri();
+                photo = new File(imageUri.getPath());
+                card.setImageURI(imageUri);
+                launchMediaScanIntent();
+                try {
+                    bitmap2 = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                    bitmap = decodeBitmapUri(this, imageUri);
+                    if (detector.isOperational() && bitmap != null) {
+                        Frame frame = new Frame.Builder().setBitmap(bitmap).build();
+                        SparseArray<TextBlock> textBlocks = detector.detect(frame);
+                        String blocks = "";
+                        String lines = "";
+                        String words = "";
+                        for (int index = 0; index < textBlocks.size(); index++) {
+                            //extract scanned text blocks here
+                            TextBlock tBlock = textBlocks.valueAt(index);
+                            blocks = blocks + tBlock.getValue() + "\n" + "\n";
+                            for (Text line : tBlock.getComponents()) {
+                                //extract scanned text lines here
+                                lines = lines + line.getValue() + "\n";
+                                for (Text element : line.getComponents()) {
+                                    //extract scanned text words here
+                                    words = words + element.getValue() + ", ";
+                                }
                             }
                         }
-                    }
-                    if (textBlocks.size() == 0) {
-                        extractText.setText("Scan Failed: Found nothing to scan");
+                        if (textBlocks.size() == 0) {
+                            extractText.setText("Scan Failed: Found nothing to scan");
+                        } else {
+                            extractName(blocks);
+                            extractEmail(words);
+                            extractPhone(blocks);
+                            extractAddress(lines);
+                            extractDesignation(words);
+                            extractWebsite(words);
+                        }
                     } else {
-                        extractName(blocks);
-                        extractEmail(words);
-                        extractPhone(blocks);
-                        extractAddress(lines);
-                        extractDesignation(words);
-                        extractWebsite(words);
+                        extractText.setText("Could not set up the detector!");
                     }
-                } else {
-                    extractText.setText("Could not set up the detector!");
+                } catch (Exception e) {
+                    Toast.makeText(this, "Failed to load Image", Toast.LENGTH_SHORT)
+                            .show();
+                    Log.e("AddCardActivity", e.toString());
                 }
-            } catch (Exception e) {
-                Toast.makeText(this, "Failed to load Image", Toast.LENGTH_SHORT)
-                        .show();
-                Log.e("AddCardActivity", e.toString());
+            } else {
+                finish();
             }
-        } else {
-            finish();
         }
     }
 
@@ -274,7 +275,7 @@ public class AddCardActivity extends AppCompatActivity {
         for (int i = 0; i < words.length; i++) {
             for (int j = 0; j < keywords.length; j++) {
                 if (words[i].replaceAll("\\s", "").equals(keywords[j])) {
-                    designation.append(words[i].replaceAll("\\s",""));
+                    designation.append(words[i].replaceAll("\\s", ""));
                 }
             }
         }

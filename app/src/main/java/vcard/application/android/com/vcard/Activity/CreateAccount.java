@@ -18,6 +18,7 @@ public class CreateAccount extends AppCompatActivity {
 
     public EditText firstName, number, email, password, lastName, address, companyName;
     Button createAccount;
+    public int errorFlag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +36,37 @@ public class CreateAccount extends AppCompatActivity {
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                performRegistration();
+                if(firstName.getText().toString().length() == 0){
+                    firstName.setError("Enter first name");
+                    errorFlag = 1;
+                }
+                if(lastName.getText().toString().length() == 0){
+                    lastName.setError("Enter last name");
+                    errorFlag = 1;
+                }
+                if(number.getText().toString().length() != 10){
+                    number.setError("Enter 10 digit number");
+                    errorFlag = 1;
+                }
+                if(email.getText().toString().length() == 0){
+                    email.setError("Enter email");
+                    errorFlag = 1;
+                }
+                if(companyName.getText().toString().length() == 0){
+                    companyName.setError("Enter company name");
+                    errorFlag = 1;
+                }
+                if(address.getText().toString().length() == 0){
+                    address.setError("Enter address");
+                    errorFlag = 1;
+                }
+                if(password.getText().toString().length() == 0){
+                    password.setError("Enter password");
+                    errorFlag = 1;
+                }
+                if(errorFlag == 0) {
+                    performRegistration();
+                }
             }
         });
     }

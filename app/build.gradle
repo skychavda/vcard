@@ -57,5 +57,7 @@ dependencies {
     implementation "android.arch.core:runtime:1.1.1"
     implementation "android.arch.core:common:1.1.1"
 
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.5.+'
+
 }
 apply plugin: 'com.google.gms.google-services'
