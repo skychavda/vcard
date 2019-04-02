@@ -102,25 +102,25 @@
                         android:background="?android:selectableItemBackground"
                         android:src="@drawable/ic_message_black_24dp"/>
                 </LinearLayout>
-                <TextView
-                    android:id="@+id/show_card_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:drawableLeft="@drawable/ic_email_black_24dp"
-                    android:padding="10dp"
-                    android:drawablePadding="10dp"
-                    android:gravity="center|left"
-                    android:text=""
-                    android:textAppearance="@android:style/TextAppearance.Medium"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:drawableLeft="@drawable/ic_work_black_24dp"
-                    android:padding="10dp"
-                    android:drawablePadding="10dp"
-                    android:gravity="center|left"
-                    android:text=""
-                    android:textAppearance="@android:style/TextAppearance.Medium"/>
+                <!--<TextView-->
+                    <!--android:id="@+id/show_card_email"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="50dp"-->
+                    <!--android:drawableLeft="@drawable/ic_email_black_24dp"-->
+                    <!--android:padding="10dp"-->
+                    <!--android:drawablePadding="10dp"-->
+                    <!--android:gravity="center|left"-->
+                    <!--android:text=""-->
+                    <!--android:textAppearance="@android:style/TextAppearance.Medium"/>-->
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="50dp"-->
+                    <!--android:drawableLeft="@drawable/ic_work_black_24dp"-->
+                    <!--android:padding="10dp"-->
+                    <!--android:drawablePadding="10dp"-->
+                    <!--android:gravity="center|left"-->
+                    <!--android:text=""-->
+                    <!--android:textAppearance="@android:style/TextAppearance.Medium"/>-->
             </LinearLayout>
         </android.support.v7.widget.CardView>
         <android.support.v7.widget.CardView
@@ -132,14 +132,14 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
                 <TextView
-                    android:id="@+id/show_card_add_notes"
+                    android:id="@+id/show_card_create_vcf"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:drawableLeft="@drawable/ic_event_note_black_24dp"
                     android:padding="10dp"
                     android:drawablePadding="10dp"
                     android:gravity="center|left"
-                    android:text="Add Notes"
+                    android:text="Share Card"
                     android:textAppearance="@android:style/TextAppearance.Medium"/>
             </LinearLayout>
         </android.support.v7.widget.CardView>

@@ -93,8 +93,10 @@ public class CreateAccount extends AppCompatActivity {
                     MainActivity.prefConfig.writeCompany(CompanyName);
                     MainActivity.prefConfig.writeNumber(userNumber);
                     MainActivity.prefConfig.writeAddress(Address);
-
-                    startActivity(new Intent(CreateAccount.this, MainActivity.class));
+                    Intent i = new Intent(CreateAccount.this, MainActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                    finish();
                 } else if (response.body().getResponse().equals("user exist")) {
                     MainActivity.prefConfig.displayToast("User already exist");
                 } else if (response.body().getResponse().equals("error")) {

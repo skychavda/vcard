@@ -65,7 +65,10 @@ public class Login extends AppCompatActivity {
                     MainActivity.prefConfig.writeCompany(response.body().getCompanyName());
                     MainActivity.prefConfig.writeAddress(response.body().getAddress());
                     MainActivity.prefConfig.displayToast("Login");
-                    startActivity(new Intent(Login.this,MainActivity.class));
+                    Intent i = new Intent(Login.this,MainActivity.class);
+                    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(i);
+                    finish();
                 }else if(response.body().getResponse().equals("fail")){
                     MainActivity.prefConfig.displayToast("Failed");
                 }
