@@ -354,7 +354,7 @@ public class AddCardActivity extends AppCompatActivity {
             public void onResponse(Call<UploadedCard> call, Response<UploadedCard> response) {
                 if (response.isSuccessful()) {
                     progressDialog.cancel();
-                    MainActivity.prefConfig.displayToast("Server Response: " + response.body().getResponse());
+                    MainActivity.prefConfig.displayToast("Image uploaded successfully");
                     startActivity(new Intent(AddCardActivity.this, MainActivity.class));
                 }
             }
