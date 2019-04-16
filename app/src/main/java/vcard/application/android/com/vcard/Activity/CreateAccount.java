@@ -1,12 +1,16 @@
 package vcard.application.android.com.vcard.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -19,12 +23,15 @@ public class CreateAccount extends AppCompatActivity {
     public EditText firstName, number, email, password, lastName, address, companyName;
     Button createAccount;
     public int errorFlag = 0;
+    ProgressDialog progressDialog;
+    ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_account);
         firstName = findViewById(R.id.create_account_first_name_tv);
+        scrollView = findViewById(R.id.create_account_scrollView);
         number = findViewById(R.id.create_account_number_tv);
         email = findViewById(R.id.create_account_email_tv);
         password = findViewById(R.id.create_account_password_tv);
@@ -81,24 +88,32 @@ public class CreateAccount extends AppCompatActivity {
         String userPassword = password.getText().toString();
 
         Call<User> call = MainActivity.apiInterface.performRegistration(userEmail, userPassword, userNumber, FirstName, LastName, Address, CompanyName);
-
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Creating account");
+        progressDialog.setMessage("please wait...");
+        progressDialog.show();
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.body().getResponse().equals("Account created")) {
-                    Log.d("CreatAccount","Response");
+                    progressDialog.cancel();
+                    MainActivity.prefConfig.writeUserId(response.body().getId());
                     MainActivity.prefConfig.displayToast("Registration Success");
                     MainActivity.prefConfig.writeLoginStatus(true);
                     MainActivity.prefConfig.writeName(FirstName+" "+LastName);
                     MainActivity.prefConfig.writeCompany(CompanyName);
                     MainActivity.prefConfig.writeNumber(userNumber);
                     MainActivity.prefConfig.writeAddress(Address);
+                    MainActivity.prefConfig.writeEmail(userEmail);
                     Intent i = new Intent(CreateAccount.this, MainActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
                     finish();
                 } else if (response.body().getResponse().equals("user exist")) {
-                    MainActivity.prefConfig.displayToast("User already exist");
+                    progressDialog.dismiss();
+                    final Snackbar snackbar = Snackbar.make(scrollView,"User Exist",Snackbar.LENGTH_LONG);
+                    snackbar.show();
+//                    MainActivity.prefConfig.displayToast("User already exist");
                 } else if (response.body().getResponse().equals("error")) {
                     MainActivity.prefConfig.displayToast("Something wrong");
                 }

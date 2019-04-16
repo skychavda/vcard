@@ -39,6 +39,10 @@ public interface ApiInterface {
     Call<List<CardItem>> getCard(@Query("key") String keyword, @Query("userId") int UserId);
 
     @FormUrlEncoded
+    @POST("deleteAccount.php")
+    Call<User> deleteUserAccount(@Field("userId") int userId);
+
+    @FormUrlEncoded
     @POST("deleteCard.php")
     Call<CardItem> deleteCard(@Field("cardId") int cardId);
 
@@ -52,6 +56,15 @@ public interface ApiInterface {
             @Part("firstName1") RequestBody firstName1,
             @Part("contactNumber1") RequestBody contactNumber1,
             @Part("contactEmail1") RequestBody contactEmail1,
-            @Part("designation1") RequestBody designation1);
+            @Part("designation1") RequestBody designation1,
+            @Part("fulltext") RequestBody fulltext);
+
+//    @FormUrlEncoded
+    @GET("addFavorite.php")
+    Call<List<CardItem>> addFavorite(@Query("key") String keyword, @Query("cardId") int CardId);
+
+//    @FormUrlEncoded
+    @GET("addFavorite.php")
+    Call<List<CardItem>> getFavorite(@Query("userId") int UserId);
 
 }

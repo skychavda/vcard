@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +18,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.io.Console;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import vcard.application.android.com.vcard.Helper.BottomNavigationViewHelper;
 import vcard.application.android.com.vcard.R;
 import vcard.application.android.com.vcard.Utility.User;
@@ -30,6 +34,7 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_AppCompat_Light_DarkActionBar);
         setContentView(R.layout.activity_user);
 
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.user_bottomNavigation);
@@ -76,11 +81,56 @@ public class UserActivity extends AppCompatActivity {
             public void onClick(View v) {
                 MainActivity.prefConfig.writeLoginStatus(false);
                 MainActivity.prefConfig.writeName("User");
+                MainActivity.prefConfig.writeAddress("None");
+                MainActivity.prefConfig.writeUserId(0);
+                MainActivity.prefConfig.writeNumber("None");
+                MainActivity.prefConfig.writeEmail("None");
+                MainActivity.prefConfig.writeCompany("None");
                 Intent i = new Intent(UserActivity.this,WelcomeScreen.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(i);
                 finish();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.delete_user_account,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.delete_account ){
+            int userID = MainActivity.prefConfig.readUserId();
+            Call<User> call = MainActivity.apiInterface.deleteUserAccount(userID);
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if(response.body().getResponse().equals("deleted")){
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+
+                }
+            });
+            MainActivity.prefConfig.writeLoginStatus(false);
+            MainActivity.prefConfig.writeName("User");
+            MainActivity.prefConfig.writeAddress("None");
+            MainActivity.prefConfig.writeUserId(0);
+            MainActivity.prefConfig.writeNumber("None");
+            MainActivity.prefConfig.writeEmail("None");
+            MainActivity.prefConfig.writeCompany("None");
+            Intent i = new Intent(UserActivity.this,WelcomeScreen.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(i);
+            finish();
+        }
+        return true;
     }
 }

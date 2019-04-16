@@ -1,11 +1,14 @@
 package vcard.application.android.com.vcard.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 
 import java.util.List;
 
@@ -20,15 +23,17 @@ public class Login extends AppCompatActivity {
     EditText email, password;
     Button login;
     public int errorFlag = 0;
+    ProgressDialog progressDialog;
+    ScrollView scrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.Theme_AppCompat_Light_NoActionBar);
         setContentView(R.layout.activity_login);
         email = findViewById(R.id.login_email_tv);
         password = findViewById(R.id.login_password_tv);
         login = findViewById(R.id.login_btn);
+        scrollView = findViewById(R.id.login_scrollView);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,10 +58,15 @@ public class Login extends AppCompatActivity {
         String userPassword = password.getText().toString();
 
         Call<User> call = MainActivity.apiInterface.performUserLogin(userEmail,userPassword);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Logging you in");
+        progressDialog.setMessage("hold a second...");
+        progressDialog.show();
         call.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if(response.body().getResponse().equals("ok")){
+                    progressDialog.cancel();
                     MainActivity.prefConfig.writeLoginStatus(true);
                     MainActivity.prefConfig.writeUserId(response.body().getId());
                     MainActivity.prefConfig.writeName(response.body().getFirstName()+" "+response.body().getLastName());
@@ -64,13 +74,14 @@ public class Login extends AppCompatActivity {
                     MainActivity.prefConfig.writeNumber(response.body().getNumber());
                     MainActivity.prefConfig.writeCompany(response.body().getCompanyName());
                     MainActivity.prefConfig.writeAddress(response.body().getAddress());
-                    MainActivity.prefConfig.displayToast("Login");
                     Intent i = new Intent(Login.this,MainActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(i);
                     finish();
                 }else if(response.body().getResponse().equals("fail")){
-                    MainActivity.prefConfig.displayToast("Failed");
+                    progressDialog.cancel();
+                    final Snackbar snackbar = Snackbar.make(scrollView,"User not exist",Snackbar.LENGTH_LONG);
+                    snackbar.show();
                 }
             }
 

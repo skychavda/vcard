@@ -33,12 +33,10 @@
             android:layout_below="@id/relativeTopBar"
             android:gravity="center_vertical">
 
-            <TextView
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/favorite_recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="30sp"
-                android:textAlignment="center"
-                android:text="Favorite"/>
+                android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
         </RelativeLayout>
 
         <RelativeLayout

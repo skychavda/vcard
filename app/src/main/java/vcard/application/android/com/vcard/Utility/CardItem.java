@@ -16,6 +16,11 @@ public class CardItem {
     private String contactNumber1;
     private String contactEmail;
     private String designation;
+    private String isFavorite;
+
+    public String getIsFavorite() {
+        return isFavorite;
+    }
 
     public String getResponse() {
         return response;

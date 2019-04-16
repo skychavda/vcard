@@ -71,6 +71,8 @@
                     android:id="@+id/add_card_contact_editView"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:maxLength="10"
+                    android:inputType="number"
                     android:layout_weight="3"/>
             </LinearLayout>
 
@@ -91,6 +93,7 @@
                 <EditText
                     android:id="@+id/add_card_email_editView"
                     android:layout_width="0dp"
+                    android:inputType="textEmailAddress"
                     android:layout_height="wrap_content"
                     android:layout_weight="3"/>
             </LinearLayout>

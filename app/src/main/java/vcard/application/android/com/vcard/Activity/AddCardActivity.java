@@ -81,6 +81,7 @@ public class AddCardActivity extends AppCompatActivity {
     private static final int REQUEST_WRITE_PERMISSION = 20;
     File photo;
     ProgressDialog progressDialog;
+    String words = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,7 +155,7 @@ public class AddCardActivity extends AppCompatActivity {
                         SparseArray<TextBlock> textBlocks = detector.detect(frame);
                         String blocks = "";
                         String lines = "";
-                        String words = "";
+                        words = "";
                         for (int index = 0; index < textBlocks.size(); index++) {
                             //extract scanned text blocks here
                             TextBlock tBlock = textBlocks.valueAt(index);
@@ -339,30 +340,37 @@ public class AddCardActivity extends AppCompatActivity {
         RequestBody contactNumber1 = RequestBody.create(MediaType.parse("multipart/form-data"), contact_Number1);
         RequestBody personName1 = RequestBody.create(MediaType.parse("multipart/form-data"), person_Name1);
         RequestBody designation1 = RequestBody.create(MediaType.parse("multipart/form-data"), designation_1);
+        RequestBody fulltext = RequestBody.create(MediaType.parse("multipart/form-data"), words);
 
         MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
 
+        if(company_Name.length() == 0){
+            company.setError("Please enter name");
+        } else if(contact_Number1.length() == 0){
+            phone.setError("Please enter number");
+        } else if(contact_Email1.length() == 0){
+            email.setError("Please enter email");
+        } else {
+            Call<UploadedCard> call = MainActivity.apiInterface.addCard(userID, body, companyName, companyAddress, personName1, contactNumber1, contactEmail1, designation1, fulltext);
+            progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Uploading image");
+            progressDialog.setMessage("please wait...");
+            progressDialog.show();
 
-        Call<UploadedCard> call = MainActivity.apiInterface.addCard(userID, body, companyName, companyAddress, personName1, contactNumber1, contactEmail1, designation1);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Uploading image");
-        progressDialog.setMessage("please wait...");
-        progressDialog.show();
-
-        call.enqueue(new Callback<UploadedCard>() {
-            @Override
-            public void onResponse(Call<UploadedCard> call, Response<UploadedCard> response) {
-                if (response.isSuccessful()) {
-                    progressDialog.cancel();
-                    MainActivity.prefConfig.displayToast("Image uploaded successfully");
-                    startActivity(new Intent(AddCardActivity.this, MainActivity.class));
+            call.enqueue(new Callback<UploadedCard>() {
+                @Override
+                public void onResponse(Call<UploadedCard> call, Response<UploadedCard> response) {
+                    if (response.isSuccessful()) {
+                        progressDialog.cancel();
+                        startActivity(new Intent(AddCardActivity.this, MainActivity.class));
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<UploadedCard> call, Throwable t) {
+                @Override
+                public void onFailure(Call<UploadedCard> call, Throwable t) {
 
-            }
-        });
+                }
+            });
+        }
     }
 }

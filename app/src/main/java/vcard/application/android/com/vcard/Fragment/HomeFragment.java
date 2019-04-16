@@ -61,7 +61,7 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    public void fetchUser(String key, String userId){
+    public void fetchUser(String key, final String userId){
         Call<List<CardItem>> call = MainActivity.apiInterface.getCard(key, Integer.parseInt(userId));
         call.enqueue(new Callback<List<CardItem>>() {
             @Override

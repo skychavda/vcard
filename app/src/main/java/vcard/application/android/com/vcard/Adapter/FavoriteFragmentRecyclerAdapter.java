@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -13,14 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -28,30 +23,30 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import vcard.application.android.com.vcard.Activity.MainActivity;
 import vcard.application.android.com.vcard.Activity.ShowCard;
-import vcard.application.android.com.vcard.Fragment.HomeFragment;
 import vcard.application.android.com.vcard.R;
 import vcard.application.android.com.vcard.Utility.CardItem;
 
-public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragmentRecyclerAdapter.HomeFragmentHolder> {
+public class FavoriteFragmentRecyclerAdapter extends RecyclerView.Adapter<FavoriteFragmentRecyclerAdapter.FavoriteViewHolder> {
 
     List<CardItem> itemList;
     RequestOptions options;
     Context context;
-    public HomeFragmentRecyclerAdapter(Context context, List<CardItem> itemList){
+    public FavoriteFragmentRecyclerAdapter(Context context, List<CardItem> itemList){
         this.context=context;
         this.itemList=itemList;
         options = new RequestOptions().autoClone();
     }
+
     @NonNull
     @Override
-    public HomeFragmentHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FavoriteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.home_reycler_item,parent,false);
-        return new HomeFragmentHolder(view,context,itemList);
+        return new FavoriteViewHolder(view,context,itemList);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final HomeFragmentHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final FavoriteViewHolder holder, final int position) {
         holder.tvName.setText(itemList.get(position).getCompayName());
         holder.tvEmail.setText(itemList.get(position).getContactEmail());
         holder.tvNumber.setText(itemList.get(position).getContactNumber1());
@@ -103,13 +98,13 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
         return itemList.size();
     }
 
-    public class HomeFragmentHolder extends RecyclerView.ViewHolder implements View.OnClickListener,View.OnLongClickListener{
+    public class FavoriteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         TextView tvName,tvNumber,tvEmail;
         ImageView ivCard,ivFavorite;
         CardView cardView;
         List<CardItem> cardItems;
         Context ctx;
-        public HomeFragmentHolder(View itemView,Context ctx,List<CardItem> cardItems) {
+        public FavoriteViewHolder(View itemView,Context ctx,List<CardItem> cardItems) {
             super(itemView);
             this.cardItems=cardItems;
             this.ctx=ctx;
@@ -133,7 +128,6 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
             intent.putExtra("image",cardItem.getFrontImage());
             intent.putExtra("name",cardItem.getCompayName());
             intent.putExtra("email",cardItem.getContactEmail());
-            intent.putExtra("address",cardItem.getCompanyAddress());
             intent.putExtra("number",cardItem.getContactNumber1());
             this.ctx.startActivity(intent);
         }
@@ -152,7 +146,7 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
                     call.enqueue(new Callback<CardItem>() {
                         @Override
                         public void onResponse(Call<CardItem> call, Response<CardItem> response) {
-                            MainActivity.prefConfig.displayToast("" + response.body().getResponse());
+                            MainActivity.prefConfig.displayToast("Server Response: " + response.body().getResponse());
                             Intent i = new Intent(v.getContext(), MainActivity.class);
                             v.getContext().startActivity(i);
                         }
@@ -168,19 +162,5 @@ public class HomeFragmentRecyclerAdapter extends RecyclerView.Adapter<HomeFragme
 //            Toast.makeText(ctx, "id: "+cardItems.get(position).getCardId(), Toast.LENGTH_SHORT).show();
             return false;
         }
-
-
-
-//        public void bind(final CardItem item, final OnItemClickListner listener){
-//            tvName.setText(item.getName());
-//            tvNumber.setText(item.getNumber());
-//            ivCard.setImageResource(item.getCardId());
-//            cardView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    listener.onItemClick(item);
-//                }
-//            });
-//        }
     }
 }

@@ -29,7 +29,7 @@ import vcard.application.android.com.vcard.Utility.CardItem;
 
 public class ShowCard extends AppCompatActivity {
 
-    TextView number, email,address,companyEmail,name, shareCard;
+    TextView number, email, address, companyEmail, name, shareCard;
     ImageButton message;
     CardItem cardItem;
     ImageView imageView;
@@ -58,6 +58,7 @@ public class ShowCard extends AppCompatActivity {
         name.setText(getIntent().getStringExtra("name"));
         number.setText(getIntent().getStringExtra("number"));
         companyEmail.setText(getIntent().getStringExtra("email"));
+        address.setText(getIntent().getStringExtra("address"));
         Glide.with(this).load(getIntent().getStringExtra("image")).apply(options).into(imageView);
 
 
@@ -74,15 +75,15 @@ public class ShowCard extends AppCompatActivity {
         address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = "http://maps.google.com/maps?daddr="+address.getText();
-                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,  Uri.parse(url));
+                String url = "http://maps.google.com/maps?daddr=" + address.getText();
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(intent);
             }
         });
         message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Intent.ACTION_VIEW,Uri.fromParts("sms", String.valueOf(number.getText()),null)));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.fromParts("sms", String.valueOf(number.getText()), null)));
             }
         });
 //        email.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +98,7 @@ public class ShowCard extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent mailIntent = new Intent(Intent.ACTION_SENDTO);
-                mailIntent.setData(Uri.parse("mailto:"+companyEmail.getText()));
+                mailIntent.setData(Uri.parse("mailto:" + companyEmail.getText()));
                 startActivity(mailIntent);
             }
         });
@@ -105,30 +106,32 @@ public class ShowCard extends AppCompatActivity {
         shareCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                File vcfFile = new File(mFile, name.getText().toString()+".vcf");
+                File vcfFile = new File(mFile, name.getText().toString() + ".vcf");
                 FileWriter fw = null;
                 try {
                     fw = new FileWriter(vcfFile);
                     fw.write("BEGIN:VCARD\r\n");
                     fw.write("VERSION:3.0\r\n");
-                    fw.write("N:" + name + "\r\n");
-//                    fw.write("FN:" + p.getFirstName() + " " + p.getSurname() + "\r\n");
+                    fw.write("N:" + name.getText().toString() + "\r\n");
+                    fw.write("FN:" + name.getText().toString() + "\r\n");
 //                    fw.write("ORG:" + p.getCompanyName() + "\r\n");
-                    fw.write("TITLE:" + name + "\r\n");
+                    fw.write("TITLE:" + name.getText().toString() + "\r\n");
 //                    fw.write("TEL;TYPE=WORK,VOICE:" + number + "\r\n");
-                    fw.write("TEL;TYPE=HOME,VOICE:" + number + "\r\n");
+                    fw.write("TEL;TYPE=HOME,VOICE:" + number.getText().toString() + "\r\n");
 //                    fw.write("ADR;TYPE=WORK:;;" + p.getStreet() + ";" + p.getCity() + ";" + p.getState() + ";" + p.getPostcode() + ";" + p.getCountry() + "\r\n");
-                    fw.write("EMAIL;TYPE=PREF,INTERNET:" + companyEmail + "\r\n");
+                    fw.write("EMAIL;TYPE=PREF,INTERNET:" + companyEmail.getText().toString() + "\r\n");
                     fw.write("END:VCARD\r\n");
                     fw.close();
-                    Toast.makeText(ShowCard.this, "Created", Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-//                Intent i = new Intent();
-//                i.setAction(android.content.Intent.ACTION_VIEW);
-//                i.setDataAndType(Uri.fromFile(vcfFile), "text/x-vcard");
-//                startActivity(i);
+                Uri uri = Uri.fromFile(vcfFile);
+                Intent intent = new Intent();
+                File file = new File(vcfFile.getAbsolutePath());
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_STREAM, uri);
+                startActivity(Intent.createChooser(intent, "Share VCard"));
             }
         });
     }
